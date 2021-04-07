@@ -13,7 +13,8 @@ public class Supermarket {
 
   public Supermarket() {}
 
-  public Supermarket(String name) {
+  public Supermarket(Long id, String name) {
+    this.id = id;
     this.name = name;
   }
 
@@ -62,4 +63,5 @@ public class Supermarket {
   public String toString() {
     return "Supermarket [id=" + id + ", name=" + name + "]";
   }
+
 }

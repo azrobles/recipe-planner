@@ -10,11 +10,10 @@ class SupermarketDtoMapperTest {
   
   @Test
   void toDtoTest() {
-    Supermarket model = new Supermarket();
-    model.setId(1L);
-    model.setName("name");
+    Supermarket model = new Supermarket(1L, "name");
 
     SupermarketDto dto = SupermarketDtoMapper.toDto(model);
+
     assertEquals(model.getId(), dto.getId());
     assertEquals(model.getName(), dto.getName());
   }
@@ -26,6 +25,7 @@ class SupermarketDtoMapperTest {
     dto.setName("name");
     
     Supermarket model = SupermarketDtoMapper.toModel(dto);
+    
     assertEquals(dto.getId(), model.getId());
     assertEquals(dto.getName(), model.getName());
   }

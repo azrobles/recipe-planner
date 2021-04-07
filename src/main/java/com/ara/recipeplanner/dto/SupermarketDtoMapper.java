@@ -25,10 +25,7 @@ public class SupermarketDtoMapper {
       return null;
     }
     
-    Supermarket model = new Supermarket(dto.getName());
-    model.setId(dto.getId());
-
-    return model;
+    return new Supermarket(dto.getId(), dto.getName());
   }
 
 }
