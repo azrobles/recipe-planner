@@ -26,11 +26,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SupermarketServiceTest {
 
-  @Mock
-  private SupermarketRepository repository;
-
   @InjectMocks
   private SupermarketService service;
+
+  @Mock
+  private SupermarketRepository repository;
 
   @Test
   void indexTest() {

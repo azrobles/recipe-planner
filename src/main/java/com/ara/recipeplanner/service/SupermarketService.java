@@ -21,7 +21,7 @@ public class SupermarketService {
     return repository.findAll();
   }
 
-  public Supermarket show(Long id) {
+  public Supermarket show(Long id) throws EntityNotFoundException {
     return repository.findById(id)
       .orElseThrow(() -> 
         new EntityNotFoundException("supermarket", Long.toString(id)));
