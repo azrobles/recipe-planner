@@ -44,6 +44,25 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.11.3</version>
+        <configuration>
+					<!-- node downloaded from https://nodejs.org/dist/ -->
+          <nodeVersion>v10.13.0</nodeVersion>
+        </configuration>
+        <executions>
+          <execution>
+            <id>install-npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+						<!-- optional: default phase is "generate-resources" -->
+						<phase>generate-resources</phase>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
 
