@@ -1,0 +1,21 @@
+{
+  "name": "recipe-planner",
+  "version": "1.0.0",
+  "description": "A simple recipe planner",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azrobles/recipe-planner.git"
+  },
+  "author": "Azucena Robles Alonso",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/azrobles/recipe-planner/issues"
+  },
+  "homepage": "https://github.com/azrobles/recipe-planner#readme",
+  "dependencies": {
+    "@angular/cli": "^11.2.8"
+  }
+}
