@@ -83,8 +83,18 @@
 							<arguments>run-script build</arguments>
 						</configuration>
 					</execution>
-					<execution>
+          <execution>
             <id>npm-test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <arguments>run-script test</arguments>
+            </configuration>
+          </execution>
+					<execution>
+            <id>npm-test-e2e</id>
             <goals>
               <goal>npm</goal>
             </goals>
