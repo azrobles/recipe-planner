@@ -29,6 +29,7 @@ describe('HomeComponent', () => {
 
   it('should render title', () => {
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('Recipe Planner app is running!');
+    expect(compiled.querySelector('.content span').textContent)
+      .toContain('Recipe Planner is running!');
   });
 });

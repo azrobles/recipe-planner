@@ -21,4 +21,18 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
+
+  it(`should have as currentYear current year`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.currentYear).toEqual(new Date().getFullYear());
+  });
+
+  it('should render currentYear', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('footer p small').textContent)
+      .toContain(`${ new Date().getFullYear() }`);
+  });
 });
