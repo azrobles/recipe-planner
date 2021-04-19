@@ -9,4 +9,4 @@ IF NOT EXIST "%NODE_EXE%" (
 
 SET "NG=%~dp0\node_modules\@angular\cli\bin\ng"
 
-"%NG%" %*
+"%NODE_EXE%" "%NG%" %*
