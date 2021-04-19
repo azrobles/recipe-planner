@@ -11,8 +11,9 @@
       Recipe Planner
     </a>
 
-    <button class="navbar-toggler" type="button" aria-controls="navbarContent" [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation"
-        (click)="isCollapsed = !isCollapsed">
+    <button class="navbar-toggler" type="button" aria-controls="navbarContent"
+      [attr.aria-expanded]="!isCollapsed" aria-label="Toggle navigation"
+      (click)="isCollapsed = !isCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -20,11 +21,21 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [routerLink]="'.'" (click)="isCollapsed = true">Home</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active"
+            #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+            [attr.aria-current]="rla.isActive ? 'page' : undefined"
+            (click)="isCollapsed = true">
+            Home
+          </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="'.'" (click)="isCollapsed = true">Admin</a>
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active"
+            #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+            [attr.aria-current]="rla.isActive ? 'page' : undefined"
+            (click)="isCollapsed = true">
+            Admin
+          </a>
         </li>
 
       </ul>
