@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(SupermarketController.class)
 class SupermarketControllerTest {
 
-	private static final String BASE_URL = "/supermarkets";
+	private static final String BASE_URL = "/api/supermarkets";
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -44,7 +44,7 @@ class SupermarketControllerTest {
 	@Test
 	void indexControllerTest() throws Exception {
 		when(service.index()).thenReturn(List.of(new Supermarket()));
-    
+
 		this.mockMvc.perform(get(BASE_URL)).andDo(print())
       .andExpect(status().isOk())
 			.andExpect(jsonPath("$", hasSize(1)));
@@ -110,7 +110,7 @@ class SupermarketControllerTest {
 			.andExpect(jsonPath("$").isNotEmpty())
 			.andExpect(jsonPath("$.id").value(id))
 			.andExpect(jsonPath("$.name").value(name));
-			
+
 		verify(service, times(1)).update(entity, id);
 	}
 
@@ -125,5 +125,5 @@ class SupermarketControllerTest {
 
 		verify(service, times(1)).delete(id);
 	}
-  
+
 }

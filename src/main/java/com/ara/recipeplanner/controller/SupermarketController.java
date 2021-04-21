@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/supermarkets")
+@RequestMapping("/api/supermarkets")
 public class SupermarketController {
-  
+
   private final SupermarketService service;
 
   public SupermarketController(SupermarketService service) {
@@ -29,15 +29,15 @@ public class SupermarketController {
 
   @GetMapping
   public List<SupermarketDto> indexController() {
-    
+
     return service.index().stream()
       .map(SupermarketDtoMapper::toDto).collect(Collectors.toList());
   }
 
   @GetMapping("/{id}")
-  public SupermarketDto showController(@PathVariable Long id) 
+  public SupermarketDto showController(@PathVariable Long id)
       throws EntityNotFoundException {
-    
+
     return SupermarketDtoMapper.toDto(service.show(id));
   }
 
@@ -61,5 +61,5 @@ public class SupermarketController {
   public void deleteController(@PathVariable Long id) {
     service.delete(id);
   }
-  
+
 }
