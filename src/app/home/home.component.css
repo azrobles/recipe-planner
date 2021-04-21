@@ -50,7 +50,7 @@ svg#rocket {
 }
 
 svg#rocket-smoke {
-  height: calc(100vh - 195px);
+  height: calc(100vh - 205px);
   position: absolute;
   top: 10px;
   right: 180px;
