@@ -1,1 +1,27 @@
-<p>supermarket-list works!</p>
+<div class="container">
+
+  <h3>Supermarkets</h3>
+
+  <table class="table table-hover">
+    <caption>List of supermarkets</caption>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let supermarket of supermarkets$ | async">
+        <th scope="row">{{ supermarket.id }}</th>
+        <td>{{ supermarket.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="errorMessage">
+    <ngb-alert type="danger" [dismissible]="false">
+      {{ errorMessage }}
+    </ngb-alert>
+  </p>
+
+</div>
