@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { Supermarket } from '../models/supermarket.model';
 import { SupermarketService } from '../services/supermarket.service';
@@ -26,7 +27,8 @@ describe('SupermarketListComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ SupermarketListComponent ],
-      providers: [{provide: SupermarketService, useValue: supermarketService}]
+      imports: [ NgbModule ],
+      providers: [{ provide: SupermarketService, useValue: supermarketService }]
     })
     .compileComponents();
   });
