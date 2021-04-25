@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { SupermarketListComponent } from './supermarket-list/supermarket-list.component';
+import { SupermarketFormComponent } from './supermarket-form/supermarket-form.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SupermarketListComponent } from './supermarket-list/supermarket-list.co
     PageNotFoundComponent,
     HomeComponent,
     AdminComponent,
-    SupermarketListComponent
+    SupermarketListComponent,
+    SupermarketFormComponent
   ],
   imports: [
     BrowserModule,

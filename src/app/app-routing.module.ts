@@ -5,11 +5,13 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { SupermarketListComponent } from './supermarket-list/supermarket-list.component';
+import { SupermarketFormComponent } from './supermarket-form/supermarket-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'supermarkets/new', component: SupermarketFormComponent },
   { path: 'supermarkets', component: SupermarketListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];

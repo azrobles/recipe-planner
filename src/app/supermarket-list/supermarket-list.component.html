@@ -1,27 +1,50 @@
 <div class="container">
 
-  <h3>Supermarkets</h3>
+  <div class="row">
 
-  <table class="table table-hover">
-    <caption>List of supermarkets</caption>
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let supermarket of supermarkets$ | async">
-        <th scope="row">{{ supermarket.id }}</th>
-        <td>{{ supermarket.name }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="col-auto mr-auto">
+      <h3>Supermarkets</h3>
+    </div>
 
-  <p *ngIf="errorMessage">
-    <ngb-alert type="danger" [dismissible]="false">
-      {{ errorMessage }}
-    </ngb-alert>
-  </p>
+    <div class="col-auto">
+      <a class="btn btn-primary" routerLink="/supermarkets/new">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+        </svg>
+        Add
+      </a>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-hover">
+        <caption>List of supermarkets</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let supermarket of supermarkets$ | async">
+            <th scope="row">{{ supermarket.id }}</th>
+            <td>{{ supermarket.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
 
 </div>
