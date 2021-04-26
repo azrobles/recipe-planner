@@ -21,6 +21,10 @@ export class SupermarketService {
     private http: HttpClient
   ) { }
 
+  clearSupermarket(): Supermarket {
+    return { id: undefined, name: '' };
+  }
+
   getSupermarkets(): Observable<Supermarket[]> {
     return this.http.get<Supermarket[]>(this.supermarketsUrl)
       .pipe(

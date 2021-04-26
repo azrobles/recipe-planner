@@ -32,6 +32,14 @@ describe('SupermarketService', () => {
     expect(service).toBeTruthy();
   });
 
+  describe('#clearSupermarket', () => {
+    let testData: Supermarket = { id: undefined, name: '' };
+
+    it('should return cleared supermarket', () => {
+      expect(service.clearSupermarket()).toEqual(testData, 'should return cleared supermarket');
+    });
+  });
+
   describe('#getSupermarkets', () => {
     let testData: Supermarket[];
 
