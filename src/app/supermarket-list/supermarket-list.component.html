@@ -28,7 +28,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let supermarket of supermarkets$ | async">
+          <tr *ngFor="let supermarket of supermarkets$ | async"
+            (click)="gotoSupermarketDetail(supermarket.id)">
             <th scope="row">{{ supermarket.id }}</th>
             <td>{{ supermarket.name }}</td>
           </tr>

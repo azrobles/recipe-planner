@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { Supermarket } from '../models/supermarket.model';
@@ -10,6 +11,7 @@ describe('SupermarketListComponent', () => {
   let component: SupermarketListComponent;
   let fixture: ComponentFixture<SupermarketListComponent>;
   let getSupermarketsSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testSupermarkets: Supermarket[];
 
   const errorMessage = () => {
@@ -25,10 +27,16 @@ describe('SupermarketListComponent', () => {
     getSupermarketsSpy = supermarketService.getSupermarkets.and
       .returnValue(of(testSupermarkets));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ SupermarketListComponent ],
       imports: [ NgbModule ],
-      providers: [{ provide: SupermarketService, useValue: supermarketService }]
+      providers: [
+        { provide: SupermarketService, useValue: supermarketService },
+        { provide: Router, useValue: routerSpy }
+      ]
     })
     .compileComponents();
   });
@@ -74,4 +82,14 @@ describe('SupermarketListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/supermarkets', testSupermarkets[0].id], 'should nav to SupermarketForm');
+  });
 });

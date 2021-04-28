@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'supermarkets/new', component: SupermarketFormComponent },
+  { path: 'supermarkets/:id', component: SupermarketFormComponent },
   { path: 'supermarkets', component: SupermarketListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Supermarket } from '../models/supermarket.model';
@@ -15,7 +16,8 @@ export class SupermarketListComponent implements OnInit {
   supermarkets$!: Observable<Supermarket[]>;
 
   constructor(
-    private supermarketService: SupermarketService
+    private supermarketService: SupermarketService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class SupermarketListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoSupermarketDetail(id?: number): void {
+    this.router.navigate(['/supermarkets', id]);
   }
 
 }
