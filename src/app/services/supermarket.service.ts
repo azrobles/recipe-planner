@@ -32,6 +32,13 @@ export class SupermarketService {
       );
   }
 
+  getSupermarket(id: number): Observable<Supermarket> {
+    const url = `${this.supermarketsUrl}/${id}`;
+    return this.http.get<Supermarket>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   addSupermarket(supermarket: Supermarket): Observable<Supermarket> {
     return this.http.post<Supermarket>(this.supermarketsUrl, supermarket, this.httpOptions)
       .pipe(

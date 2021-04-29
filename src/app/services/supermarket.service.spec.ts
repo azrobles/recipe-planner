@@ -101,6 +101,51 @@ describe('SupermarketService', () => {
     });
   });
 
+  describe('#getSupermarket', () => {
+    it('should return expected supermarket', () => {
+      const id = 1;
+      const testData: Supermarket = { id: id, name: 'A' };
+
+      service.getSupermarket(id).subscribe(
+        data => expect(data).toEqual(testData, 'should return the supermarket'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${id}`);
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(testData);
+    });
+
+    it('should turn 404 error into user-facing error', () => {
+      const id = 1;
+      const msg = 'Deliberate 404';
+
+      service.getSupermarket(id).subscribe(
+        data => fail('expected to fail'),
+        error => expect(error).toContain(msg)
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${id}`);
+      req.flush(msg, { status: 404, statusText: 'Not Found' });
+    });
+
+    it('should turn network error into user-facing error', () => {
+      const id = 1;
+      const emsg = 'simulated network error';
+
+      service.getSupermarket(id).subscribe(
+        data => fail('expected to fail'),
+        error => expect(error).toContain(emsg)
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${id}`);
+
+      const errorEvent = new ErrorEvent('Network error', { message: emsg });
+      req.error(errorEvent);
+    });
+  });
+
   describe('#addSupermarket', () => {
     it('should create a supermarket and return it', () => {
       const testData: Supermarket = { id: 1, name: 'A' };
