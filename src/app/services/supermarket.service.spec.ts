@@ -193,6 +193,53 @@ describe('SupermarketService', () => {
     });
   });
 
+  describe('#updateSupermarket', () => {
+    it('should update a supermarket and return it', () => {
+      const testData: Supermarket = { id: 1, name: 'A' };
+
+      service.updateSupermarket(testData).subscribe(
+        data => expect(data).toEqual(testData, 'should return the supermarket'),
+        fail
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${testData.id}`);
+      expect(req.request.method).toEqual('PUT');
+      expect(req.request.body).toEqual(testData);
+
+      const expectedResponse = new HttpResponse(
+        { status: 200, statusText: 'OK', body: testData });
+      req.event(expectedResponse);
+    });
+
+    it('should turn 404 error into user-facing error', () => {
+      const msg = 'Deliberate 404';
+      const testData: Supermarket = { id: 1, name: 'A' };
+
+      service.updateSupermarket(testData).subscribe(
+        data => fail('expected to fail'),
+        error => expect(error).toContain(msg)
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${testData.id}`);
+      req.flush(msg, { status: 404, statusText: 'Not Found' });
+    });
+
+    it('should turn network error into user-facing error', () => {
+      const emsg = 'simulated network error';
+      const testData: Supermarket = { id: 1, name: 'A' };
+
+      service.updateSupermarket(testData).subscribe(
+        data => fail('expected to fail'),
+        error => expect(error).toContain(emsg)
+      );
+
+      const req = httpTestingController.expectOne(testUrl + `/${testData.id}`);
+
+      const errorEvent = new ErrorEvent('Network error', { message: emsg });
+      req.error(errorEvent);
+    });
+  });
+
   it('httpTestingController.verify should fail if HTTP response not simulated', () => {
     httpClient.get('some/api').subscribe();
 

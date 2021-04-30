@@ -46,6 +46,14 @@ export class SupermarketService {
       );
   }
 
+  updateSupermarket(supermarket: Supermarket): Observable<Supermarket> {
+    const url = `${this.supermarketsUrl}/${supermarket.id}`;
+    return this.http.put<Supermarket>(url, supermarket, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error(error);
 
