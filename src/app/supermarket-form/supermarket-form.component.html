@@ -8,7 +8,7 @@
 
   <div class="row">
     <div class="col">
-      <form [formGroup]="supermarketForm" (ngSubmit)="onSubmit()" (ngReset)="onReset()">
+      <form [formGroup]="supermarketForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
 
         <div class="form-group">
           <label for="nameInput">Name</label>
