@@ -21,7 +21,7 @@ let testSupermarket: Supermarket;
 describe('SupermarketFormComponent', () => {
   beforeEach(async () => {
     const supermarketServiceSpy = jasmine.createSpyObj('SupermarketService',
-      ['clearSupermarket', 'addSupermarket', 'getSupermarket']);
+      ['clearSupermarket', 'addSupermarket', 'getSupermarket', 'updateSupermarket']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     activatedRoute = new ActivatedRouteStub();
 
@@ -55,6 +55,10 @@ describe('SupermarketFormComponent', () => {
 
       const navArgs = page.navigateSpy.calls.first().args[0];
       expect(navArgs).toEqual(['/supermarkets'], 'should nav to SupermarketList');
+    });
+
+    it('should addMode be true', () => {
+      expect(component.isAddMode).toBe(true);
     });
 
     it('should have called `clearSupermarket`', () => {
@@ -124,6 +128,10 @@ describe('SupermarketFormComponent', () => {
       createComponent();
     });
 
+    it('should addMode be false', () => {
+      expect(component.isAddMode).toBe(false);
+    });
+
     it('should have called `getSupermarket`', () => {
       expect(page.getSupermarketSpy.calls.count()).toBe(1, 'getSupermarket called once');
     });
@@ -147,6 +155,41 @@ describe('SupermarketFormComponent', () => {
       expect(page.nameInput.value).toBe(testSupermarket.name);
       expect(page.nameInput.value).toBeTruthy();
     });
+
+    it('should update and navigate when click submit', fakeAsync(() => {
+      page.nameInput.value = 'New Name';
+      page.nameInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      page.submitBtn.click();
+
+      expect(page.updateSupermarketSpy.calls.any()).toBe(true, 'updateSupermarket called');
+
+      tick();
+
+      expect(page.navigateSpy.calls.any()).toBe(true, 'navigate called');
+
+      const navArgs = page.navigateSpy.calls.first().args[0];
+      expect(navArgs).toEqual(['/supermarkets'], 'should nav to SupermarketList');
+    }));
+
+    it('should display error when update supermarket fails', fakeAsync(() => {
+      page.updateSupermarketSpy.and
+        .returnValue(throwError('SupermarketService test failure'));
+
+      page.nameInput.value = 'New Name';
+      page.nameInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      page.submitBtn.click();
+
+      tick();
+
+      fixture.detectChanges();
+
+      expect(page.errorMessage).toMatch(/test failure/, 'should display error');
+      expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
+    }));
   });
 });
 
@@ -180,6 +223,7 @@ class Page {
   clearSupermarketSpy: jasmine.Spy;
   addSupermarketSpy: jasmine.Spy;
   getSupermarketSpy: jasmine.Spy;
+  updateSupermarketSpy: jasmine.Spy;
   navigateSpy: jasmine.Spy;
 
   constructor(someFixture: ComponentFixture<SupermarketFormComponent>) {
@@ -189,6 +233,8 @@ class Page {
     this.addSupermarketSpy = supermarketServiceSpy.addSupermarket.and
       .returnValue(of(testSupermarket));
     this.getSupermarketSpy = supermarketServiceSpy.getSupermarket.and
+      .returnValue(of(testSupermarket));
+    this.updateSupermarketSpy = supermarketServiceSpy.updateSupermarket.and
       .returnValue(of(testSupermarket));
 
     const routerSpy = someFixture.debugElement.injector.get(Router) as any;
