@@ -57,6 +57,10 @@ describe('SupermarketFormComponent', () => {
       expect(navArgs).toEqual(['/supermarkets'], 'should nav to SupermarketList');
     });
 
+    it('should loading be false', () => {
+      expect(component.loading).toBe(false);
+    });
+
     it('should addMode be true', () => {
       expect(component.isAddMode).toBe(true);
     });
@@ -92,6 +96,7 @@ describe('SupermarketFormComponent', () => {
 
       page.submitBtn.click();
 
+      expect(component.loading).toBe(true);
       expect(page.addSupermarketSpy.calls.any()).toBe(true, 'addSupermarket called');
 
       tick();
@@ -116,6 +121,7 @@ describe('SupermarketFormComponent', () => {
 
       fixture.detectChanges();
 
+      expect(component.loading).toBe(false);
       expect(page.errorMessage).toMatch(/test failure/, 'should display error');
       expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
     }));
@@ -126,6 +132,10 @@ describe('SupermarketFormComponent', () => {
       testSupermarket = { id: 1, name: 'A' };
       activatedRoute.setParamMap({ id: testSupermarket.id });
       createComponent();
+    });
+
+    it('should loading be false', () => {
+      expect(component.loading).toBe(false);
     });
 
     it('should addMode be false', () => {
@@ -163,6 +173,7 @@ describe('SupermarketFormComponent', () => {
 
       page.submitBtn.click();
 
+      expect(component.loading).toBe(true);
       expect(page.updateSupermarketSpy.calls.any()).toBe(true, 'updateSupermarket called');
 
       tick();
@@ -187,6 +198,7 @@ describe('SupermarketFormComponent', () => {
 
       fixture.detectChanges();
 
+      expect(component.loading).toBe(false);
       expect(page.errorMessage).toMatch(/test failure/, 'should display error');
       expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
     }));

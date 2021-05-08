@@ -40,8 +40,10 @@
 
           <div class="col-4 col-sm-3 col-md-2 col-xl-1">
             <button type="submit" class="btn btn-primary btn-block"
-              [disabled]="!supermarketForm.valid">
-              Submit
+              [disabled]="!supermarketForm.valid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="loading" class="sr-only">Loading...</span>
+              <span *ngIf="!loading">Submit</span>
             </button>
           </div>
 

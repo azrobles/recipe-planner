@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +15,7 @@ export class SupermarketFormComponent implements OnInit {
   supermarket!: Supermarket;
   supermarketForm!: FormGroup;
   isAddMode!: boolean;
+  loading = false;
 
   constructor(
     private supermarketService: SupermarketService,
@@ -33,7 +33,10 @@ export class SupermarketFormComponent implements OnInit {
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));
     this.isAddMode = !id;
-    if(id) this.getSupermarket(id);
+    if(id) {
+      this.loading = true;
+      this.getSupermarket(id);
+    }
   }
 
   private getSupermarket(id: number): void {
@@ -45,10 +48,12 @@ export class SupermarketFormComponent implements OnInit {
         } else {
           this.isAddMode = true;
         }
+        this.loading = false;
       },
       error: (err: any) => {
         this.isAddMode = true;
         this.errorMessage = err.message || err.toString();
+        this.loading = false;
       }
     });
   }
@@ -56,6 +61,7 @@ export class SupermarketFormComponent implements OnInit {
   get name() { return this.supermarketForm.get('name'); }
 
   onSubmit(): void {
+    this.loading = true;
     if(this.isAddMode) {
       this.addSupermarket();
     } else {
@@ -77,7 +83,10 @@ export class SupermarketFormComponent implements OnInit {
     this.errorMessage = '';
     this.supermarketService.addSupermarket(this.supermarketForm.value).subscribe({
       next: data => this.gotoSupermarketList(),
-      error: (err: any) => this.errorMessage = err.message || err.toString()
+      error: (err: any) => {
+        this.errorMessage = err.message || err.toString();
+        this.loading = false;
+      }
     });
   }
 
@@ -85,7 +94,10 @@ export class SupermarketFormComponent implements OnInit {
     this.errorMessage = '';
     this.supermarketService.updateSupermarket(this.supermarketForm.value).subscribe({
       next: data => this.gotoSupermarketList(),
-      error: (err: any) => this.errorMessage = err.message || err.toString()
+      error: (err: any) => {
+        this.errorMessage = err.message || err.toString();
+        this.loading = false;
+      }
     });
   }
 
