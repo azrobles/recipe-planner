@@ -54,6 +54,13 @@ export class SupermarketService {
       );
   }
 
+  deleteSupermarket(id: number): Observable<Supermarket> {
+    const url = `${this.supermarketsUrl}/${id}`;
+    return this.http.delete<Supermarket>(url, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error(error);
 
