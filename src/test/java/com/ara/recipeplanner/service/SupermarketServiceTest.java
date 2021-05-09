@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
+import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.model.Supermarket;
 import com.ara.recipeplanner.repository.SupermarketRepository;
@@ -41,7 +42,7 @@ class SupermarketServiceTest {
     assertEquals(1, list.size());
     verify(repository, times(1)).findAll();
   }
-  
+
   @Test
   void showTest() {
     Long id = 1L;
@@ -76,6 +77,16 @@ class SupermarketServiceTest {
   }
 
   @Test
+  void createEntityDuplicatedExceptionTest() {
+    String name = "name";
+    when(repository.findOneByName(name)).thenReturn(new Supermarket(1L, name));
+    Supermarket entity = new Supermarket(null, name);
+
+    assertThrows(EntityDuplicatedException.class, () -> service.create(entity));
+    verify(repository, times(0)).save(entity);
+  }
+
+  @Test
   void updateTest() {
     Long id = 1L;
     String name = "other";
@@ -92,6 +103,19 @@ class SupermarketServiceTest {
   }
 
   @Test
+  void updateEntityDuplicatedExceptionTest() {
+    Long id = 1L;
+    String name = "other";
+    when(repository.findOneByName(name)).thenReturn(new Supermarket(id+1,name));
+    when(repository.findById(id))
+      .thenReturn(Optional.of(new Supermarket(id, "name")));
+    Supermarket entity = new Supermarket(id, name);
+
+    assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
+    verify(repository, times(0)).save(any(Supermarket.class));
+  }
+
+  @Test
   void updateNewTest() {
     Long id = 1L;
     when(repository.findById(id)).thenReturn(Optional.empty());
@@ -105,6 +129,18 @@ class SupermarketServiceTest {
   }
 
   @Test
+  void updateNewEntityDuplicatedExceptionTest() {
+    Long id = 1L;
+    String name = "other";
+    when(repository.findOneByName(name)).thenReturn(new Supermarket(id+1,name));
+    when(repository.findById(id)).thenReturn(Optional.empty());
+    Supermarket entity = new Supermarket(null, name);
+
+    assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
+    verify(repository, times(0)).save(entity);
+  }
+
+  @Test
   void deleteTest() {
     Long id = 1L;
     doNothing().when(repository).deleteById(id);
@@ -113,5 +149,5 @@ class SupermarketServiceTest {
 
     verify(repository, times(1)).deleteById(id);
   }
-  
+
 }
