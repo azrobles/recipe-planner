@@ -21,7 +21,8 @@ let testSupermarket: Supermarket;
 describe('SupermarketFormComponent', () => {
   beforeEach(async () => {
     const supermarketServiceSpy = jasmine.createSpyObj('SupermarketService',
-      ['clearSupermarket', 'addSupermarket', 'getSupermarket', 'updateSupermarket']);
+      ['clearSupermarket', 'addSupermarket', 'getSupermarket',
+      'updateSupermarket', 'deleteSupermarket']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     activatedRoute = new ActivatedRouteStub();
 
@@ -76,6 +77,10 @@ describe('SupermarketFormComponent', () => {
 
     it('should not display error message', () => {
       expect(page.errorMessage).toBeNull('should not display error element');
+    });
+
+    it('should not display delete button', () => {
+      expect(page.deleteBtn).toBeNull('should not display delete button');
     });
 
     it('should reset form when click reset', () => {
@@ -155,6 +160,10 @@ describe('SupermarketFormComponent', () => {
       expect(page.errorMessage).toBeNull('should not display error element');
     });
 
+    it('should display delete button', () => {
+      expect(page.deleteBtn).toBeTruthy('should display delete button');
+    });
+
     it('should reset form when click reset', () => {
       page.nameInput.value = 'New Name';
       page.nameInput.dispatchEvent(new Event('input'));
@@ -202,6 +211,35 @@ describe('SupermarketFormComponent', () => {
       expect(page.errorMessage).toMatch(/test failure/, 'should display error');
       expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
     }));
+
+    it('should delete and navigate when click delete', fakeAsync(() => {
+      page.deleteBtn.click();
+
+      expect(component.loading).toBe(true);
+      expect(page.deleteSupermarketSpy.calls.any()).toBe(true, 'deleteSupermarket called');
+
+      tick();
+
+      expect(page.navigateSpy.calls.any()).toBe(true, 'navigate called');
+
+      const navArgs = page.navigateSpy.calls.first().args[0];
+      expect(navArgs).toEqual(['/supermarkets'], 'should nav to SupermarketList');
+    }));
+
+    it('should display error when delete supermarket fails', fakeAsync(() => {
+      page.deleteSupermarketSpy.and
+        .returnValue(throwError('SupermarketService test failure'));
+
+      page.deleteBtn.click();
+
+      tick();
+
+      fixture.detectChanges();
+
+      expect(component.loading).toBe(false);
+      expect(page.errorMessage).toMatch(/test failure/, 'should display error');
+      expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
+    }));
   });
 });
 
@@ -215,6 +253,9 @@ function createComponent() {
 }
 
 class Page {
+  get deleteBtn() {
+    return this.query<HTMLButtonElement>('.btn-danger');
+  }
   get cancelBtn() {
     return this.query<HTMLButtonElement>('[type="button"]');
   }
@@ -236,6 +277,7 @@ class Page {
   addSupermarketSpy: jasmine.Spy;
   getSupermarketSpy: jasmine.Spy;
   updateSupermarketSpy: jasmine.Spy;
+  deleteSupermarketSpy: jasmine.Spy;
   navigateSpy: jasmine.Spy;
 
   constructor(someFixture: ComponentFixture<SupermarketFormComponent>) {
@@ -247,6 +289,8 @@ class Page {
     this.getSupermarketSpy = supermarketServiceSpy.getSupermarket.and
       .returnValue(of(testSupermarket));
     this.updateSupermarketSpy = supermarketServiceSpy.updateSupermarket.and
+      .returnValue(of(testSupermarket));
+    this.deleteSupermarketSpy = supermarketServiceSpy.deleteSupermarket.and
       .returnValue(of(testSupermarket));
 
     const routerSpy = someFixture.debugElement.injector.get(Router) as any;

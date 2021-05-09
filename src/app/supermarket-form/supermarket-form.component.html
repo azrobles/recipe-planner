@@ -1,10 +1,21 @@
 <div class="container">
 
   <div class="row">
-    <div class="col">
+
+    <div class="col-auto mr-auto">
       <h3 *ngIf="isAddMode">Add Supermarket</h3>
       <h3 *ngIf="!isAddMode">Edit Supermarket</h3>
     </div>
+
+    <div *ngIf="!isAddMode" class="col-auto">
+      <button type="button" class="btn btn-danger mb-2 mb-sm-0"
+        (click)="deleteSupermarket()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span *ngIf="loading" class="sr-only">Loading...</span>
+        <span *ngIf="!loading">Delete</span>
+      </button>
+    </div>
+
   </div>
 
   <div class="row">

@@ -33,13 +33,13 @@ export class SupermarketFormComponent implements OnInit {
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));
     this.isAddMode = !id;
-    if(id) {
-      this.loading = true;
+    if(!this.isAddMode) {
       this.getSupermarket(id);
     }
   }
 
   private getSupermarket(id: number): void {
+    this.loading = true;
     this.supermarketService.getSupermarket(id).subscribe({
       next: data => {
         if(data) {
@@ -61,7 +61,6 @@ export class SupermarketFormComponent implements OnInit {
   get name() { return this.supermarketForm.get('name'); }
 
   onSubmit(): void {
-    this.loading = true;
     if(this.isAddMode) {
       this.addSupermarket();
     } else {
@@ -80,6 +79,7 @@ export class SupermarketFormComponent implements OnInit {
   }
 
   addSupermarket(): void {
+    this.loading = true;
     this.errorMessage = '';
     this.supermarketService.addSupermarket(this.supermarketForm.value).subscribe({
       next: data => this.gotoSupermarketList(),
@@ -91,8 +91,21 @@ export class SupermarketFormComponent implements OnInit {
   }
 
   updateSupermarket(): void {
+    this.loading = true;
     this.errorMessage = '';
     this.supermarketService.updateSupermarket(this.supermarketForm.value).subscribe({
+      next: data => this.gotoSupermarketList(),
+      error: (err: any) => {
+        this.errorMessage = err.message || err.toString();
+        this.loading = false;
+      }
+    });
+  }
+
+  deleteSupermarket(): void {
+    this.loading = true;
+    this.errorMessage = '';
+    this.supermarketService.deleteSupermarket(this.supermarket.id!).subscribe({
       next: data => this.gotoSupermarketList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
