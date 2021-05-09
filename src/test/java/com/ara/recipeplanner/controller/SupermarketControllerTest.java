@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.model.Supermarket;
 import com.ara.recipeplanner.service.SupermarketService;
@@ -96,6 +97,25 @@ class SupermarketControllerTest {
 		verify(service, times(1)).create(entity);
 	}
 
+  @Test
+	void createControllerEntityDuplicatedExceptionTest() throws Exception {
+		Long id = 1L;
+		String name = "name";
+		Supermarket entity = new Supermarket(id, name);
+		String entityName = "supermarket";
+		when(service.create(entity))
+			.thenThrow(new EntityDuplicatedException(entityName));
+
+		this.mockMvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", is(
+        "Another " + entityName + " with the same data exists")));
+
+		verify(service, times(1)).create(entity);
+	}
+
 	@Test
 	void updateControllerTest() throws Exception {
 		Long id = 1L;
@@ -110,6 +130,25 @@ class SupermarketControllerTest {
 			.andExpect(jsonPath("$").isNotEmpty())
 			.andExpect(jsonPath("$.id").value(id))
 			.andExpect(jsonPath("$.name").value(name));
+
+		verify(service, times(1)).update(entity, id);
+	}
+
+  @Test
+	void updateControllerEntityDuplicatedExceptionTest() throws Exception {
+		Long id = 1L;
+		String name = "name";
+		Supermarket entity = new Supermarket(id, name);
+		String entityName = "supermarket";
+		when(service.update(entity, id))
+			.thenThrow(new EntityDuplicatedException(entityName));
+
+		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", is(
+        "Another " + entityName + " with the same data exists")));
 
 		verify(service, times(1)).update(entity, id);
 	}
