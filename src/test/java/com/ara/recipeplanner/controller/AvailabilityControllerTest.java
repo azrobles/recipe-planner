@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
-import com.ara.recipeplanner.model.Supermarket;
-import com.ara.recipeplanner.service.SupermarketService;
+import com.ara.recipeplanner.model.Availability;
+import com.ara.recipeplanner.service.AvailabilityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
@@ -29,10 +29,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(SupermarketController.class)
-class SupermarketControllerTest {
+@WebMvcTest(AvailabilityController.class)
+class AvailabilityControllerTest {
 
-	private static final String BASE_URL = "/api/supermarkets";
+	private static final String BASE_URL = "/api/availabilities";
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -40,11 +40,11 @@ class SupermarketControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private SupermarketService service;
+	private AvailabilityService service;
 
 	@Test
 	void indexControllerTest() throws Exception {
-		when(service.index()).thenReturn(List.of(new Supermarket()));
+		when(service.index()).thenReturn(List.of(new Availability()));
 
 		this.mockMvc.perform(get(BASE_URL)).andDo(print())
       .andExpect(status().isOk())
@@ -56,7 +56,7 @@ class SupermarketControllerTest {
 	@Test
 	void showControllerTest() throws Exception {
 		Long id = 1L;
-		when(service.show(id)).thenReturn(new Supermarket(id, "name"));
+		when(service.show(id)).thenReturn(new Availability(id, "name"));
 
 		this.mockMvc.perform(get(BASE_URL + "/{id}", id)).andDo(print())
 			.andExpect(status().isOk())
@@ -68,7 +68,7 @@ class SupermarketControllerTest {
 	@Test
 	void showControllerEntityNotFoundExceptionTest() throws Exception {
 		Long id = 1L;
-		String entity = "supermarket";
+		String entity = "availability";
 		when(service.show(id))
 			.thenThrow(new EntityNotFoundException(entity, Long.toString(id)));
 
@@ -83,7 +83,7 @@ class SupermarketControllerTest {
 	void createControllerTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Supermarket entity = new Supermarket(id, name);
+		Availability entity = new Availability(id, name);
 		when(service.create(entity)).thenReturn(entity);
 
 		this.mockMvc.perform(post(BASE_URL)
@@ -101,8 +101,8 @@ class SupermarketControllerTest {
 	void createControllerEntityDuplicatedExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Supermarket entity = new Supermarket(id, name);
-		String entityName = "supermarket";
+		Availability entity = new Availability(id, name);
+		String entityName = "availability";
 		when(service.create(entity))
 			.thenThrow(new EntityDuplicatedException(entityName));
 
@@ -118,7 +118,7 @@ class SupermarketControllerTest {
 
   @Test
 	void createControllerMethodArgumentNotValidExceptionTest() throws Exception {
-		Supermarket entity = new Supermarket(null, null);
+		Availability entity = new Availability(null, null);
 
 		this.mockMvc.perform(post(BASE_URL)
       .contentType(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ class SupermarketControllerTest {
 	void updateControllerTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Supermarket entity = new Supermarket(id, name);
+		Availability entity = new Availability(id, name);
 		when(service.update(entity, id)).thenReturn(entity);
 
 		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
@@ -151,8 +151,8 @@ class SupermarketControllerTest {
 	void updateControllerEntityDuplicatedExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Supermarket entity = new Supermarket(id, name);
-		String entityName = "supermarket";
+		Availability entity = new Availability(id, name);
+		String entityName = "availability";
 		when(service.update(entity, id))
 			.thenThrow(new EntityDuplicatedException(entityName));
 
@@ -169,7 +169,7 @@ class SupermarketControllerTest {
   @Test
 	void updateControllerMethodArgumentNotValidExceptionTest() throws Exception {
     Long id = 1L;
-		Supermarket entity = new Supermarket(id, null);
+		Availability entity = new Availability(id, null);
 
 		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
       .contentType(MediaType.APPLICATION_JSON)
