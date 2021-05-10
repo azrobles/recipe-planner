@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { SupermarketListComponent } from './supermarket-list/supermarket-list.component';
 import { SupermarketFormComponent } from './supermarket-form/supermarket-form.component';
+import { AvailabilityListComponent } from './availability-list/availability-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'supermarkets/new', component: SupermarketFormComponent },
   { path: 'supermarkets/:id', component: SupermarketFormComponent },
   { path: 'supermarkets', component: SupermarketListComponent },
+  { path: 'availabilities', component: AvailabilityListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

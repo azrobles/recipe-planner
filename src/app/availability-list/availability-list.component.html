@@ -1,0 +1,41 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3>Availabilities</h3>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-hover">
+        <caption>List of availabilities</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let availability of availabilities$ | async">
+            <th scope="row">{{ availability.id }}</th>
+            <td>{{ availability.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>
