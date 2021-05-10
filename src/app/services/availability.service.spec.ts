@@ -1,27 +1,26 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
-import { TestBed } from '@angular/core/testing';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { Availability } from '../models/availability.model';
 
-import { SupermarketService } from './supermarket.service';
-import { Supermarket } from '../models/supermarket.model';
+import { AvailabilityService } from './availability.service';
 
-const testUrl = '/api/supermarkets';
+const testUrl = '/api/availabilities';
 
-describe('SupermarketService', () => {
+describe('AvailabilityService', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
-  let service: SupermarketService;
+  let service: AvailabilityService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ SupermarketService ]
+      providers: [ AvailabilityService ]
     });
 
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(SupermarketService);
+    service = TestBed.inject(AvailabilityService);
   });
 
   afterEach(() => {
@@ -32,27 +31,27 @@ describe('SupermarketService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#clearSupermarket', () => {
-    let testData: Supermarket = { id: undefined, name: '' };
+  describe('#clearAvailability', () => {
+    let testData: Availability = { id: undefined, name: '' };
 
-    it('should return cleared supermarket', () => {
-      expect(service.clearSupermarket()).toEqual(testData, 'should return cleared supermarket');
+    it('should return cleared availability', () => {
+      expect(service.clearAvailability()).toEqual(testData, 'should return cleared availability');
     });
   });
 
-  describe('#getSupermarkets', () => {
-    let testData: Supermarket[];
+  describe('#getAvailabilities', () => {
+    let testData: Availability[];
 
     beforeEach(() => {
       testData = [
         { id: 1, name: 'A' },
         { id: 2, name: 'B' },
-       ] as Supermarket[];
+       ] as Availability[];
     });
 
-    it('should return expected supermarkets (called once)', () => {
-      service.getSupermarkets().subscribe(
-        data => expect(data).toEqual(testData, 'should return expected supermarkets'),
+    it('should return expected availabilities (called once)', () => {
+      service.getAvailabilities().subscribe(
+        data => expect(data).toEqual(testData, 'should return expected availabilities'),
         fail
       );
 
@@ -62,9 +61,9 @@ describe('SupermarketService', () => {
       req.flush(testData);
     });
 
-    it('should be OK returning no supermarkets', () => {
-      service.getSupermarkets().subscribe(
-        data => expect(data.length).toEqual(0, 'should have empty supermarkets array'),
+    it('should be OK returning no availabilities', () => {
+      service.getAvailabilities().subscribe(
+        data => expect(data.length).toEqual(0, 'should have empty availabilities array'),
         fail
       );
 
@@ -75,7 +74,7 @@ describe('SupermarketService', () => {
     it('should turn 404 into a user-friendly error', () => {
       const msg = 'Deliberate 404';
 
-      service.getSupermarkets().subscribe(
+      service.getAvailabilities().subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -84,16 +83,16 @@ describe('SupermarketService', () => {
       req.flush(msg, { status: 404, statusText: 'Not Found' });
     });
 
-    it('should return expected supermarkets (called multiple times)', () => {
-      service.getSupermarkets().subscribe();
-      service.getSupermarkets().subscribe();
-      service.getSupermarkets().subscribe(
-        data => expect(data).toEqual(testData, 'should return expected supermarkets'),
+    it('should return expected availabilities (called multiple times)', () => {
+      service.getAvailabilities().subscribe();
+      service.getAvailabilities().subscribe();
+      service.getAvailabilities().subscribe(
+        data => expect(data).toEqual(testData, 'should return expected availabilities'),
         fail
       );
 
       const requests = httpTestingController.match(testUrl);
-      expect(requests.length).toEqual(3, 'calls to getSupermarkets()');
+      expect(requests.length).toEqual(3, 'calls to getAvailabilities()');
 
       requests[0].flush([]);
       requests[1].flush([{ id: 1, name: 'Test Data' }]);
@@ -101,13 +100,13 @@ describe('SupermarketService', () => {
     });
   });
 
-  describe('#getSupermarket', () => {
-    it('should return expected supermarket', () => {
+  describe('#getAvailability', () => {
+    it('should return expected availability', () => {
       const id = 1;
-      const testData: Supermarket = { id: id, name: 'A' };
+      const testData: Availability = { id: id, name: 'A' };
 
-      service.getSupermarket(id).subscribe(
-        data => expect(data).toEqual(testData, 'should return the supermarket'),
+      service.getAvailability(id).subscribe(
+        data => expect(data).toEqual(testData, 'should return the availability'),
         fail
       );
 
@@ -121,7 +120,7 @@ describe('SupermarketService', () => {
       const id = 1;
       const msg = 'Deliberate 404';
 
-      service.getSupermarket(id).subscribe(
+      service.getAvailability(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -134,7 +133,7 @@ describe('SupermarketService', () => {
       const id = 1;
       const emsg = 'simulated network error';
 
-      service.getSupermarket(id).subscribe(
+      service.getAvailability(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -146,12 +145,12 @@ describe('SupermarketService', () => {
     });
   });
 
-  describe('#addSupermarket', () => {
-    it('should create a supermarket and return it', () => {
-      const testData: Supermarket = { id: 1, name: 'A' };
+  describe('#addAvailability', () => {
+    it('should create an availability and return it', () => {
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.addSupermarket(testData).subscribe(
-        data => expect(data).toEqual(testData, 'should return the supermarket'),
+      service.addAvailability(testData).subscribe(
+        data => expect(data).toEqual(testData, 'should return the availability'),
         fail
       );
 
@@ -166,9 +165,9 @@ describe('SupermarketService', () => {
 
     it('should turn 404 error into user-facing error', () => {
       const msg = 'Deliberate 404';
-      const testData: Supermarket = { id: 1, name: 'A' };
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.addSupermarket(testData).subscribe(
+      service.addAvailability(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -179,9 +178,9 @@ describe('SupermarketService', () => {
 
     it('should turn network error into user-facing error', () => {
       const emsg = 'simulated network error';
-      const testData: Supermarket = { id: 1, name: 'A' };
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.addSupermarket(testData).subscribe(
+      service.addAvailability(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -193,12 +192,12 @@ describe('SupermarketService', () => {
     });
   });
 
-  describe('#updateSupermarket', () => {
-    it('should update a supermarket and return it', () => {
-      const testData: Supermarket = { id: 1, name: 'A' };
+  describe('#updateAvailability', () => {
+    it('should update an availability and return it', () => {
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.updateSupermarket(testData).subscribe(
-        data => expect(data).toEqual(testData, 'should return the supermarket'),
+      service.updateAvailability(testData).subscribe(
+        data => expect(data).toEqual(testData, 'should return the availability'),
         fail
       );
 
@@ -213,9 +212,9 @@ describe('SupermarketService', () => {
 
     it('should turn 404 error into user-facing error', () => {
       const msg = 'Deliberate 404';
-      const testData: Supermarket = { id: 1, name: 'A' };
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.updateSupermarket(testData).subscribe(
+      service.updateAvailability(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -226,9 +225,9 @@ describe('SupermarketService', () => {
 
     it('should turn network error into user-facing error', () => {
       const emsg = 'simulated network error';
-      const testData: Supermarket = { id: 1, name: 'A' };
+      const testData: Availability = { id: 1, name: 'A' };
 
-      service.updateSupermarket(testData).subscribe(
+      service.updateAvailability(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -240,13 +239,13 @@ describe('SupermarketService', () => {
     });
   });
 
-  describe('#deleteSupermarket', () => {
-    it('should delete a supermarket', () => {
+  describe('#deleteAvailability', () => {
+    it('should delete an availability', () => {
       const id = 1;
-      const testData: Supermarket = { id: id, name: 'A' };
+      const testData: Availability = { id: id, name: 'A' };
 
-      service.deleteSupermarket(id).subscribe(
-        data => expect(data).toEqual(testData, 'should delete the supermarket'),
+      service.deleteAvailability(id).subscribe(
+        data => expect(data).toEqual(testData, 'should delete the availability'),
         fail
       );
 
@@ -260,7 +259,7 @@ describe('SupermarketService', () => {
       const id = 1;
       const msg = 'Deliberate 404';
 
-      service.deleteSupermarket(id).subscribe(
+      service.deleteAvailability(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -273,7 +272,7 @@ describe('SupermarketService', () => {
       const id = 1;
       const emsg = 'simulated network error';
 
-      service.deleteSupermarket(id).subscribe(
+      service.deleteAvailability(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
