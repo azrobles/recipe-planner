@@ -23,6 +23,7 @@ public class SupermarketService {
   }
 
   public Supermarket show(Long id) throws EntityNotFoundException {
+
     return repository.findById(id)
       .orElseThrow(() ->
         new EntityNotFoundException("supermarket", Long.toString(id)));
@@ -30,12 +31,15 @@ public class SupermarketService {
 
   public Supermarket create(Supermarket entity)
       throws EntityDuplicatedException {
+
     checkDuplicated(entity);
+
     return repository.save(entity);
   }
 
   public Supermarket update(Supermarket entity, Long id)
       throws EntityDuplicatedException {
+
     return repository.findById(id)
       .map(e -> {
         e.setName(entity.getName());
@@ -55,7 +59,9 @@ public class SupermarketService {
 
   private void checkDuplicated(Supermarket entity)
       throws EntityDuplicatedException {
+
     Supermarket another = repository.findOneByName(entity.getName());
+
     if(another != null && !another.getId().equals(entity.getId())) {
       throw new EntityDuplicatedException("supermarket");
     }

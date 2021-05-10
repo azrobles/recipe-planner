@@ -116,6 +116,19 @@ class SupermarketControllerTest {
 		verify(service, times(1)).create(entity);
 	}
 
+  @Test
+	void createControllerMethodArgumentNotValidExceptionTest() throws Exception {
+		Supermarket entity = new Supermarket(null, null);
+
+		this.mockMvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", is("name must not be blank;")));
+
+		verify(service, times(0)).create(entity);
+	}
+
 	@Test
 	void updateControllerTest() throws Exception {
 		Long id = 1L;
@@ -151,6 +164,20 @@ class SupermarketControllerTest {
         "Another " + entityName + " with the same data exists")));
 
 		verify(service, times(1)).update(entity, id);
+	}
+
+  @Test
+	void updateControllerMethodArgumentNotValidExceptionTest() throws Exception {
+    Long id = 1L;
+		Supermarket entity = new Supermarket(id, null);
+
+		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$", is("name must not be blank;")));
+
+    verify(service, times(0)).update(entity, id);
 	}
 
 	@Test

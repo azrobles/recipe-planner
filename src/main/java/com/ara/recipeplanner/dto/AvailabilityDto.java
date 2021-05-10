@@ -2,11 +2,16 @@ package com.ara.recipeplanner.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class AvailabilityDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   private Long id;
+  @NotBlank
+  @Size(min = 1, max = 30)
   private String name;
 
   public Long getId() {

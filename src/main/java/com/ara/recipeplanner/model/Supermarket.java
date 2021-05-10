@@ -1,14 +1,16 @@
 package com.ara.recipeplanner.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Supermarket {
-  
+
   @Id @GeneratedValue
   private Long id;
+  @Column(nullable = false, length = 30, unique = true)
   private String name;
 
   public Supermarket() {}
