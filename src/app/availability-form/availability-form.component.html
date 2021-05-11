@@ -1,0 +1,77 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3 *ngIf="isAddMode">Add Availability</h3>
+      <h3 *ngIf="!isAddMode">Edit Availability</h3>
+    </div>
+
+    <div *ngIf="!isAddMode" class="col-auto">
+      <button type="button" class="btn btn-danger mb-2 mb-sm-0"
+        (click)="deleteAvailability()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span *ngIf="loading" class="sr-only">Loading...</span>
+        <span *ngIf="!loading">Delete</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
+
+        <div class="form-group">
+          <label for="nameInput">Name</label>
+          <input type="text" class="form-control" id="nameInput"
+            formControlName="name" required
+            [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched)}"
+            [attr.aria-describedby]="name?.invalid && (name?.dirty || name?.touched) ? 'nameValidationFeedback' : undefined">
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+            id="nameValidationFeedback" class="invalid-feedback">
+            <div *ngIf="name?.errors?.required">
+              Name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="button" class="btn btn-secondary btn-block"
+              (click)="gotoAvailabilityList()">
+              Cancel
+            </button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="reset" class="btn btn-secondary btn-block">Reset</button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="submit" class="btn btn-primary btn-block"
+              [disabled]="!availabilityForm.valid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="loading" class="sr-only">Loading...</span>
+              <span *ngIf="!loading">Submit</span>
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>

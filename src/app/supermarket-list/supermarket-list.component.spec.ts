@@ -92,4 +92,5 @@ describe('SupermarketListComponent', () => {
     const navArgs = navigateSpy.calls.first().args[0];
     expect(navArgs).toEqual(['/supermarkets', testSupermarkets[0].id], 'should nav to SupermarketForm');
   });
+
 });

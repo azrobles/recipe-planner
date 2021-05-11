@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SupermarketFormComponent } from './supermarket-form/supermarket-form.component';
 import { SupermarketListComponent } from './supermarket-list/supermarket-list.component';
 import { AvailabilityListComponent } from './availability-list/availability-list.component';
+import { AvailabilityFormComponent } from './availability-form/availability-form.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AvailabilityListComponent } from './availability-list/availability-list
     AdminComponent,
     SupermarketListComponent,
     SupermarketFormComponent,
-    AvailabilityListComponent
+    AvailabilityListComponent,
+    AvailabilityFormComponent
   ],
   imports: [
     BrowserModule,

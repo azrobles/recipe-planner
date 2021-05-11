@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Availability } from '../models/availability.model';
@@ -15,7 +16,8 @@ export class AvailabilityListComponent implements OnInit {
   availabilities$!: Observable<Availability[]>;
 
   constructor(
-    private availabilityService: AvailabilityService
+    private availabilityService: AvailabilityService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class AvailabilityListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoAvailabilityDetail(id: number): void {
+    this.router.navigate(['/availabilities', id]);
   }
 
 }

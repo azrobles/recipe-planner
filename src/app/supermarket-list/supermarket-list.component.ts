@@ -35,7 +35,7 @@ export class SupermarketListComponent implements OnInit {
     );
   }
 
-  gotoSupermarketDetail(id?: number): void {
+  gotoSupermarketDetail(id: number): void {
     this.router.navigate(['/supermarkets', id]);
   }
 

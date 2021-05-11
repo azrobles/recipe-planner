@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { Availability } from '../models/availability.model';
@@ -10,6 +11,7 @@ describe('AvailabilityListComponent', () => {
   let component: AvailabilityListComponent;
   let fixture: ComponentFixture<AvailabilityListComponent>;
   let getAvailabilitiesSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testAvailabilities: Availability[];
 
   const errorMessage = () => {
@@ -25,11 +27,15 @@ describe('AvailabilityListComponent', () => {
     getAvailabilitiesSpy = availabilityService.getAvailabilities.and
       .returnValue(of(testAvailabilities));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ AvailabilityListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: AvailabilityService, useValue: availabilityService }
+        { provide: AvailabilityService, useValue: availabilityService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -76,5 +82,15 @@ describe('AvailabilityListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/availabilities', testAvailabilities[0].id], 'should nav to AvailabilityForm');
+  });
 
 });

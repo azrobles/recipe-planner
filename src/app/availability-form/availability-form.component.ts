@@ -1,50 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Supermarket } from '../models/supermarket.model';
-import { SupermarketService } from '../services/supermarket.service';
+import { Availability } from '../models/availability.model';
+import { AvailabilityService } from '../services/availability.service';
 
 @Component({
-  selector: 'app-supermarket-form',
-  templateUrl: './supermarket-form.component.html',
-  styleUrls: ['./supermarket-form.component.css']
+  selector: 'app-availability-form',
+  templateUrl: './availability-form.component.html',
+  styleUrls: ['./availability-form.component.css']
 })
-export class SupermarketFormComponent implements OnInit {
+export class AvailabilityFormComponent implements OnInit {
 
   errorMessage!: string;
-  supermarket!: Supermarket;
-  supermarketForm!: FormGroup;
+  availability!: Availability;
+  availabilityForm!: FormGroup;
   isAddMode!: boolean;
   loading = false;
 
   constructor(
-    private supermarketService: SupermarketService,
+    private availabilityService: AvailabilityService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.clearSupermarket();
+    this.clearAvailability();
 
-    this.supermarketForm = this.fb.group(this.supermarket);
+    this.availabilityForm = this.fb.group(this.availability);
     this.name!.setValidators(Validators.required);
 
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));
     this.isAddMode = !id;
     if(!this.isAddMode) {
-      this.getSupermarket(id);
+      this.getAvailability(id);
     }
   }
 
-  private getSupermarket(id: number): void {
+  private getAvailability(id: number): void {
     this.loading = true;
-    this.supermarketService.getSupermarket(id).subscribe({
+    this.availabilityService.getAvailability(id).subscribe({
       next: data => {
         if(data) {
-          this.supermarket = data;
-          this.supermarketForm.setValue(this.supermarket);
+          this.availability = data;
+          this.availabilityForm.setValue(this.availability);
         } else {
           this.isAddMode = true;
         }
@@ -58,31 +58,31 @@ export class SupermarketFormComponent implements OnInit {
     });
   }
 
-  get name() { return this.supermarketForm.get('name'); }
+  get name() { return this.availabilityForm.get('name'); }
 
   onSubmit(): void {
     if(this.isAddMode) {
-      this.addSupermarket();
+      this.addAvailability();
     } else {
-      this.updateSupermarket();
+      this.updateAvailability();
     }
   }
 
   onReset($event: Event): void {
     $event.preventDefault();
-    this.supermarketForm.reset(this.supermarket);
+    this.availabilityForm.reset(this.availability);
   }
 
-  clearSupermarket(): void {
+  clearAvailability(): void {
     this.errorMessage = '';
-    this.supermarket = this.supermarketService.clearSupermarket();
+    this.availability = this.availabilityService.clearAvailability();
   }
 
-  addSupermarket(): void {
+  addAvailability(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.supermarketService.addSupermarket(this.supermarketForm.value).subscribe({
-      next: data => this.gotoSupermarketList(),
+    this.availabilityService.addAvailability(this.availabilityForm.value).subscribe({
+      next: data => this.gotoAvailabilityList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -90,11 +90,11 @@ export class SupermarketFormComponent implements OnInit {
     });
   }
 
-  updateSupermarket(): void {
+  updateAvailability(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.supermarketService.updateSupermarket(this.supermarketForm.value).subscribe({
-      next: data => this.gotoSupermarketList(),
+    this.availabilityService.updateAvailability(this.availabilityForm.value).subscribe({
+      next: data => this.gotoAvailabilityList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -102,11 +102,11 @@ export class SupermarketFormComponent implements OnInit {
     });
   }
 
-  deleteSupermarket(): void {
+  deleteAvailability(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.supermarketService.deleteSupermarket(this.supermarket.id!).subscribe({
-      next: data => this.gotoSupermarketList(),
+    this.availabilityService.deleteAvailability(this.availability.id!).subscribe({
+      next: data => this.gotoAvailabilityList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -114,8 +114,8 @@ export class SupermarketFormComponent implements OnInit {
     });
   }
 
-  gotoSupermarketList(): void {
-    this.router.navigate(['/supermarkets']);
+  gotoAvailabilityList(): void {
+    this.router.navigate(['/availabilities']);
   }
 
 }
