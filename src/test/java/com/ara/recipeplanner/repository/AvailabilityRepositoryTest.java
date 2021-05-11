@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
-public class AvailabilityRepositoryTest {
+class AvailabilityRepositoryTest {
 
   @Autowired
   private TestEntityManager entityManager;
@@ -19,7 +19,7 @@ public class AvailabilityRepositoryTest {
   private AvailabilityRepository repository;
 
   @Test
-  public void findOneByNameTest() {
+  void findOneByNameTest() {
     String name = "name";
     Availability entity = new Availability(null, name);
     entityManager.persist(entity);

@@ -2,7 +2,7 @@ package com.ara.recipeplanner.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.ara.recipeplanner.model.Supermarket;
+import com.ara.recipeplanner.model.MeasureUnit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +10,22 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
-class SupermarketRepositoryTest {
+class MeasureUnitRepositoryTest {
 
   @Autowired
   private TestEntityManager entityManager;
 
   @Autowired
-  private SupermarketRepository repository;
+  private MeasureUnitRepository repository;
 
   @Test
   void findOneByNameTest() {
     String name = "name";
-    Supermarket entity = new Supermarket(null, name);
+    MeasureUnit entity = new MeasureUnit(null, name);
     entityManager.persist(entity);
     entityManager.flush();
 
-    Supermarket found = repository.findOneByName(name);
+    MeasureUnit found = repository.findOneByName(name);
 
     assertEquals(name, found.getName());
   }
