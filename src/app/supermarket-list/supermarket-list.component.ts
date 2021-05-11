@@ -27,7 +27,7 @@ export class SupermarketListComponent implements OnInit {
   getSupermarkets(): void {
     this.errorMessage = '';
     this.supermarkets$ = this.supermarketService.getSupermarkets().pipe(
-      startWith([]),
+      startWith([{ name: 'Loading...' }]),
       catchError( (err: any) => {
         setTimeout(() => this.errorMessage = err.message || err.toString());
         return of([]);

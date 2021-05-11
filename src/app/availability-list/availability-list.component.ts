@@ -27,7 +27,7 @@ export class AvailabilityListComponent implements OnInit {
   getAvailabilities(): void {
     this.errorMessage = '';
     this.availabilities$ = this.availabilityService.getAvailabilities().pipe(
-      startWith([]),
+      startWith([{ name: 'Loading...' }]),
       catchError( (err: any) => {
         setTimeout(() => this.errorMessage = err.message || err.toString());
         return of([]);
