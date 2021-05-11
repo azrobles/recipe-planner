@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.ara.recipeplanner.dto.AvailabilityDto;
-import com.ara.recipeplanner.dto.AvailabilityDtoMapper;
+import com.ara.recipeplanner.dto.TimeUnitDto;
+import com.ara.recipeplanner.dto.TimeUnitDtoMapper;
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
-import com.ara.recipeplanner.service.AvailabilityService;
+import com.ara.recipeplanner.service.TimeUnitService;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,46 +22,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/availabilities")
+@RequestMapping("/api/timeunits")
 @Validated
-public class AvailabilityController {
+public class TimeUnitController {
 
-  private final AvailabilityService service;
+  private final TimeUnitService service;
 
-  public AvailabilityController(AvailabilityService service) {
+  public TimeUnitController(TimeUnitService service) {
     this.service = service;
   }
 
   @GetMapping
-  public List<AvailabilityDto> indexController() {
+  public List<TimeUnitDto> indexController() {
 
     return service.index().stream()
-      .map(AvailabilityDtoMapper::toDto).collect(Collectors.toList());
+      .map(TimeUnitDtoMapper::toDto).collect(Collectors.toList());
   }
 
   @GetMapping("/{id}")
-  public AvailabilityDto showController(@PathVariable Long id)
+  public TimeUnitDto showController(@PathVariable Long id)
       throws EntityNotFoundException {
 
-    return AvailabilityDtoMapper.toDto(service.show(id));
+    return TimeUnitDtoMapper.toDto(service.show(id));
   }
 
   @PostMapping
-  public AvailabilityDto createController(
-      @Valid @RequestBody AvailabilityDto newAvailability)
+  public TimeUnitDto createController(
+      @Valid @RequestBody TimeUnitDto newTimeUnit)
       throws EntityDuplicatedException {
 
-    return AvailabilityDtoMapper.toDto(
-      service.create(AvailabilityDtoMapper.toModel(newAvailability)));
+    return TimeUnitDtoMapper.toDto(
+      service.create(TimeUnitDtoMapper.toModel(newTimeUnit)));
   }
 
   @PutMapping("/{id}")
-  public AvailabilityDto updateController(
-      @Valid @RequestBody AvailabilityDto newAvailability,
-      @PathVariable Long id) throws EntityDuplicatedException {
+  public TimeUnitDto updateController(
+      @Valid @RequestBody TimeUnitDto newTimeUnit, @PathVariable Long id)
+      throws EntityDuplicatedException {
 
-    return AvailabilityDtoMapper.toDto(
-      service.update(AvailabilityDtoMapper.toModel(newAvailability), id));
+    return TimeUnitDtoMapper.toDto(
+      service.update(TimeUnitDtoMapper.toModel(newTimeUnit), id));
   }
 
   @DeleteMapping("/{id}")

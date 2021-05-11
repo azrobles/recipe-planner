@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.ara.recipeplanner.dto.MeasureUnitDto;
 import com.ara.recipeplanner.dto.MeasureUnitDtoMapper;
+import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.service.MeasureUnitService;
 
@@ -47,7 +48,8 @@ public class MeasureUnitController {
 
   @PostMapping
   public MeasureUnitDto createController(
-      @Valid @RequestBody MeasureUnitDto newMeasureUnit) {
+      @Valid @RequestBody MeasureUnitDto newMeasureUnit)
+      throws EntityDuplicatedException {
 
     return MeasureUnitDtoMapper.toDto(
       service.create(MeasureUnitDtoMapper.toModel(newMeasureUnit)));
@@ -56,7 +58,7 @@ public class MeasureUnitController {
   @PutMapping("/{id}")
   public MeasureUnitDto updateController(
       @Valid @RequestBody MeasureUnitDto newMeasureUnit,
-      @PathVariable Long id) {
+      @PathVariable Long id) throws EntityDuplicatedException {
 
     return MeasureUnitDtoMapper.toDto(
       service.update(MeasureUnitDtoMapper.toModel(newMeasureUnit), id));

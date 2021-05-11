@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.ara.recipeplanner.dto.SupermarketDto;
 import com.ara.recipeplanner.dto.SupermarketDtoMapper;
+import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.service.SupermarketService;
 
@@ -47,7 +48,8 @@ public class SupermarketController {
 
   @PostMapping
   public SupermarketDto createController(
-      @Valid @RequestBody SupermarketDto newSupermarket) {
+      @Valid @RequestBody SupermarketDto newSupermarket)
+      throws EntityDuplicatedException {
 
     return SupermarketDtoMapper.toDto(
       service.create(SupermarketDtoMapper.toModel(newSupermarket)));
@@ -55,7 +57,8 @@ public class SupermarketController {
 
   @PutMapping("/{id}")
   public SupermarketDto updateController(
-      @Valid @RequestBody SupermarketDto newSupermarket, @PathVariable Long id){
+      @Valid @RequestBody SupermarketDto newSupermarket, @PathVariable Long id)
+      throws EntityDuplicatedException {
 
     return SupermarketDtoMapper.toDto(
       service.update(SupermarketDtoMapper.toModel(newSupermarket), id));
