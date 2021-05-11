@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { MeasureUnit } from '../models/measure-unit.model';
@@ -15,7 +16,8 @@ export class MeasureUnitListComponent implements OnInit {
   measureUnits$!: Observable<MeasureUnit[]>;
 
   constructor(
-    private measureUnitService: MeasureUnitService
+    private measureUnitService: MeasureUnitService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class MeasureUnitListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoMeasureUnitDetail(id: number): void {
+    this.router.navigate(['/measureunits', id]);
   }
 
 }

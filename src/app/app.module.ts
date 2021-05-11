@@ -14,6 +14,7 @@ import { SupermarketListComponent } from './supermarket-list/supermarket-list.co
 import { AvailabilityListComponent } from './availability-list/availability-list.component';
 import { AvailabilityFormComponent } from './availability-form/availability-form.component';
 import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
+import { MeasureUnitFormComponent } from './measure-unit-form/measure-unit-form.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.
     SupermarketFormComponent,
     AvailabilityListComponent,
     AvailabilityFormComponent,
-    MeasureUnitListComponent
+    MeasureUnitListComponent,
+    MeasureUnitFormComponent
   ],
   imports: [
     BrowserModule,

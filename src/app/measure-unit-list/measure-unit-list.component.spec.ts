@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { MeasureUnit } from '../models/measure-unit.model';
@@ -10,6 +11,7 @@ describe('MeasureUnitListComponent', () => {
   let component: MeasureUnitListComponent;
   let fixture: ComponentFixture<MeasureUnitListComponent>;
   let getMeasureUnitsSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testMeasureUnits: MeasureUnit[];
 
   const errorMessage = () => {
@@ -25,11 +27,15 @@ describe('MeasureUnitListComponent', () => {
     getMeasureUnitsSpy = measureUnitService.getMeasureUnits.and
       .returnValue(of(testMeasureUnits));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ MeasureUnitListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: MeasureUnitService, useValue: measureUnitService }
+        { provide: MeasureUnitService, useValue: measureUnitService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -76,5 +82,15 @@ describe('MeasureUnitListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/measureunits', testMeasureUnits[0].id], 'should nav to MeasureUnitForm');
+  });
 
 });
