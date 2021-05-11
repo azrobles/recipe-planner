@@ -8,6 +8,7 @@ import { SupermarketListComponent } from './supermarket-list/supermarket-list.co
 import { SupermarketFormComponent } from './supermarket-form/supermarket-form.component';
 import { AvailabilityListComponent } from './availability-list/availability-list.component';
 import { AvailabilityFormComponent } from './availability-form/availability-form.component';
+import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'availabilities/new', component: AvailabilityFormComponent },
   { path: 'availabilities/:id', component: AvailabilityFormComponent },
   { path: 'availabilities', component: AvailabilityListComponent },
+  { path: 'measureunits', component: MeasureUnitListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

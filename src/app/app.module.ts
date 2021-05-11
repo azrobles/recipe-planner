@@ -13,6 +13,7 @@ import { SupermarketFormComponent } from './supermarket-form/supermarket-form.co
 import { SupermarketListComponent } from './supermarket-list/supermarket-list.component';
 import { AvailabilityListComponent } from './availability-list/availability-list.component';
 import { AvailabilityFormComponent } from './availability-form/availability-form.component';
+import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AvailabilityFormComponent } from './availability-form/availability-form
     SupermarketListComponent,
     SupermarketFormComponent,
     AvailabilityListComponent,
-    AvailabilityFormComponent
+    AvailabilityFormComponent,
+    MeasureUnitListComponent
   ],
   imports: [
     BrowserModule,
