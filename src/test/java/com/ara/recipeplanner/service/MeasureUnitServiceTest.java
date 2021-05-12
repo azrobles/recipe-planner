@@ -57,6 +57,12 @@ class MeasureUnitServiceTest {
   }
 
   @Test
+  void showNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, () -> service.show(null));
+    verify(repository, times(0)).findById(any());
+  }
+
+  @Test
   void showEntityNotFoundExceptionTest() {
     Long id = 1L;
     when(repository.findById(id)).thenReturn(Optional.empty());
@@ -79,8 +85,8 @@ class MeasureUnitServiceTest {
   @Test
   void createEntityDuplicatedExceptionTest() {
     String name = "name";
-    when(repository.findOneByName(name)).thenReturn(new MeasureUnit(1L, name));
     MeasureUnit entity = new MeasureUnit(null, name);
+    when(repository.findOneByName(name)).thenReturn(new MeasureUnit(1L, name));
 
     assertThrows(EntityDuplicatedException.class, () -> service.create(entity));
     verify(repository, times(0)).save(entity);
@@ -103,14 +109,20 @@ class MeasureUnitServiceTest {
   }
 
   @Test
+  void updateNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, ()->service.update(null, null));
+    verify(repository, times(0)).save(any());
+  }
+
+  @Test
   void updateEntityDuplicatedExceptionTest() {
     Long id = 1L;
     String name = "other";
-    when(repository.findOneByName(name))
-      .thenReturn(new MeasureUnit(id + 1, name));
+    MeasureUnit entity = new MeasureUnit(id, name);
     when(repository.findById(id))
       .thenReturn(Optional.of(new MeasureUnit(id, "name")));
-    MeasureUnit entity = new MeasureUnit(id, name);
+    when(repository.findOneByName(name))
+      .thenReturn(new MeasureUnit(id + 1, name));
 
     assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
     verify(repository, times(0)).save(any(MeasureUnit.class));
@@ -133,10 +145,10 @@ class MeasureUnitServiceTest {
   void updateNewEntityDuplicatedExceptionTest() {
     Long id = 1L;
     String name = "other";
+    MeasureUnit entity = new MeasureUnit(null, name);
+    when(repository.findById(id)).thenReturn(Optional.empty());
     when(repository.findOneByName(name))
       .thenReturn(new MeasureUnit(id + 1, name));
-    when(repository.findById(id)).thenReturn(Optional.empty());
-    MeasureUnit entity = new MeasureUnit(null, name);
 
     assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
     verify(repository, times(0)).save(entity);
@@ -150,6 +162,12 @@ class MeasureUnitServiceTest {
     service.delete(id);
 
     verify(repository, times(1)).deleteById(id);
+  }
+
+  @Test
+  void deleteNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, () -> service.delete(null));
+    verify(repository, times(0)).deleteById(any());
   }
 
 }

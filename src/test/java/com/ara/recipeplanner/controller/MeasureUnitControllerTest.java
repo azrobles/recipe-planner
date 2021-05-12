@@ -111,7 +111,7 @@ class MeasureUnitControllerTest {
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is(
-        "Another " + entityName + " with the same data exists")));
+        "Another " + entityName + " with the same identifying data exists")));
 
 		verify(service, times(1)).create(entity);
 	}
@@ -161,7 +161,7 @@ class MeasureUnitControllerTest {
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is(
-        "Another " + entityName + " with the same data exists")));
+        "Another " + entityName + " with the same identifying data exists")));
 
 		verify(service, times(1)).update(entity, id);
 	}

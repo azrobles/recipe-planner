@@ -5,7 +5,7 @@ public class EntityDuplicatedException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   public EntityDuplicatedException(String entity) {
-    super("Another " + entity + " with the same data exists");
+    super("Another " + entity + " with the same identifying data exists");
   }
 
 }

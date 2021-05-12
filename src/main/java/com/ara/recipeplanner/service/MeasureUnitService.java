@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MeasureUnitService {
 
+  private static final String ENTITY_NAME = "measure unit";
+
   private final MeasureUnitRepository repository;
 
   public MeasureUnitService(MeasureUnitRepository repository) {
@@ -24,9 +26,11 @@ public class MeasureUnitService {
 
   public MeasureUnit show(Long id) throws EntityNotFoundException {
 
+    checkId(id);
+
     return repository.findById(id)
       .orElseThrow(() ->
-        new EntityNotFoundException("measure unit", Long.toString(id)));
+        new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
   }
 
   public MeasureUnit create(MeasureUnit entity)
@@ -38,7 +42,9 @@ public class MeasureUnitService {
   }
 
   public MeasureUnit update(MeasureUnit entity, Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
+
+    checkId(id);
 
     return repository.findById(id)
       .map(e -> {
@@ -53,8 +59,17 @@ public class MeasureUnitService {
       });
   }
 
-  public void delete(Long id) {
+  public void delete(Long id) throws EntityNotFoundException {
+
+    checkId(id);
+
     repository.deleteById(id);
+  }
+
+  private void checkId(Long id) throws EntityNotFoundException {
+    if (id == null) {
+      throw new EntityNotFoundException(ENTITY_NAME, "without id");
+    }
   }
 
   private void checkDuplicated(MeasureUnit entity)
@@ -62,8 +77,8 @@ public class MeasureUnitService {
 
     MeasureUnit another = repository.findOneByName(entity.getName());
 
-    if(another != null && !another.getId().equals(entity.getId())) {
-      throw new EntityDuplicatedException("measure unit");
+    if (another != null && !another.getId().equals(entity.getId())) {
+      throw new EntityDuplicatedException(ENTITY_NAME);
     }
   }
 

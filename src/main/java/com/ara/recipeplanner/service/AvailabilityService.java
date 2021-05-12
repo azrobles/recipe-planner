@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AvailabilityService {
 
+  private static final String ENTITY_NAME = "availability";
+
   private final AvailabilityRepository repository;
 
   public AvailabilityService(AvailabilityRepository repository) {
@@ -24,9 +26,11 @@ public class AvailabilityService {
 
   public Availability show(Long id) throws EntityNotFoundException {
 
+    checkId(id);
+
     return repository.findById(id)
       .orElseThrow(() ->
-        new EntityNotFoundException("availability", Long.toString(id)));
+        new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
   }
 
   public Availability create(Availability entity)
@@ -38,7 +42,9 @@ public class AvailabilityService {
   }
 
   public Availability update(Availability entity, Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
+
+    checkId(id);
 
     return repository.findById(id)
       .map(e -> {
@@ -53,8 +59,17 @@ public class AvailabilityService {
       });
   }
 
-  public void delete(Long id) {
+  public void delete(Long id) throws EntityNotFoundException {
+
+    checkId(id);
+
     repository.deleteById(id);
+  }
+
+  private void checkId(Long id) throws EntityNotFoundException {
+    if (id == null) {
+      throw new EntityNotFoundException(ENTITY_NAME, "without id");
+    }
   }
 
   private void checkDuplicated(Availability entity)
@@ -62,8 +77,8 @@ public class AvailabilityService {
 
     Availability another = repository.findOneByName(entity.getName());
 
-    if(another != null && !another.getId().equals(entity.getId())) {
-      throw new EntityDuplicatedException("availability");
+    if (another != null && !another.getId().equals(entity.getId())) {
+      throw new EntityDuplicatedException(ENTITY_NAME);
     }
   }
 

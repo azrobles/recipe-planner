@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SupermarketService {
 
+  private static final String ENTITY_NAME = "supermarket";
+
   private final SupermarketRepository repository;
 
   public SupermarketService(SupermarketRepository repository) {
@@ -24,9 +26,11 @@ public class SupermarketService {
 
   public Supermarket show(Long id) throws EntityNotFoundException {
 
+    checkId(id);
+
     return repository.findById(id)
       .orElseThrow(() ->
-        new EntityNotFoundException("supermarket", Long.toString(id)));
+        new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
   }
 
   public Supermarket create(Supermarket entity)
@@ -38,7 +42,9 @@ public class SupermarketService {
   }
 
   public Supermarket update(Supermarket entity, Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
+
+    checkId(id);
 
     return repository.findById(id)
       .map(e -> {
@@ -53,8 +59,17 @@ public class SupermarketService {
       });
   }
 
-  public void delete(Long id) {
+  public void delete(Long id) throws EntityNotFoundException {
+
+    checkId(id);
+
     repository.deleteById(id);
+  }
+
+  private void checkId(Long id) throws EntityNotFoundException {
+    if (id == null) {
+      throw new EntityNotFoundException(ENTITY_NAME, "without id");
+    }
   }
 
   private void checkDuplicated(Supermarket entity)
@@ -62,8 +77,8 @@ public class SupermarketService {
 
     Supermarket another = repository.findOneByName(entity.getName());
 
-    if(another != null && !another.getId().equals(entity.getId())) {
-      throw new EntityDuplicatedException("supermarket");
+    if (another != null && !another.getId().equals(entity.getId())) {
+      throw new EntityDuplicatedException(ENTITY_NAME);
     }
   }
 

@@ -57,6 +57,12 @@ class TimeUnitServiceTest {
   }
 
   @Test
+  void showNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, () -> service.show(null));
+    verify(repository, times(0)).findById(any());
+  }
+
+  @Test
   void showEntityNotFoundExceptionTest() {
     Long id = 1L;
     when(repository.findById(id)).thenReturn(Optional.empty());
@@ -79,8 +85,8 @@ class TimeUnitServiceTest {
   @Test
   void createEntityDuplicatedExceptionTest() {
     String name = "name";
-    when(repository.findOneByName(name)).thenReturn(new TimeUnit(1L, name));
     TimeUnit entity = new TimeUnit(null, name);
+    when(repository.findOneByName(name)).thenReturn(new TimeUnit(1L, name));
 
     assertThrows(EntityDuplicatedException.class, () -> service.create(entity));
     verify(repository, times(0)).save(entity);
@@ -103,13 +109,19 @@ class TimeUnitServiceTest {
   }
 
   @Test
+  void updateNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, ()->service.update(null, null));
+    verify(repository, times(0)).save(any());
+  }
+
+  @Test
   void updateEntityDuplicatedExceptionTest() {
     Long id = 1L;
     String name = "other";
-    when(repository.findOneByName(name)).thenReturn(new TimeUnit(id + 1, name));
+    TimeUnit entity = new TimeUnit(id, name);
     when(repository.findById(id))
       .thenReturn(Optional.of(new TimeUnit(id, "name")));
-    TimeUnit entity = new TimeUnit(id, name);
+    when(repository.findOneByName(name)).thenReturn(new TimeUnit(id + 1, name));
 
     assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
     verify(repository, times(0)).save(any(TimeUnit.class));
@@ -132,9 +144,9 @@ class TimeUnitServiceTest {
   void updateNewEntityDuplicatedExceptionTest() {
     Long id = 1L;
     String name = "other";
-    when(repository.findOneByName(name)).thenReturn(new TimeUnit(id + 1, name));
-    when(repository.findById(id)).thenReturn(Optional.empty());
     TimeUnit entity = new TimeUnit(null, name);
+    when(repository.findById(id)).thenReturn(Optional.empty());
+    when(repository.findOneByName(name)).thenReturn(new TimeUnit(id + 1, name));
 
     assertThrows(EntityDuplicatedException.class,()->service.update(entity,id));
     verify(repository, times(0)).save(entity);
@@ -148,6 +160,12 @@ class TimeUnitServiceTest {
     service.delete(id);
 
     verify(repository, times(1)).deleteById(id);
+  }
+
+  @Test
+  void deleteNullIdEntityNotFoundExceptionTest() {
+    assertThrows(EntityNotFoundException.class, () -> service.delete(null));
+    verify(repository, times(0)).deleteById(any());
   }
 
 }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TimeUnitService {
 
+  private static final String ENTITY_NAME = "time unit";
+
   private final TimeUnitRepository repository;
 
   public TimeUnitService(TimeUnitRepository repository) {
@@ -24,9 +26,11 @@ public class TimeUnitService {
 
   public TimeUnit show(Long id) throws EntityNotFoundException {
 
+    checkId(id);
+
     return repository.findById(id)
       .orElseThrow(() ->
-        new EntityNotFoundException("time unit", Long.toString(id)));
+        new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
   }
 
   public TimeUnit create(TimeUnit entity)
@@ -38,7 +42,9 @@ public class TimeUnitService {
   }
 
   public TimeUnit update(TimeUnit entity, Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
+
+    checkId(id);
 
     return repository.findById(id)
       .map(e -> {
@@ -53,8 +59,17 @@ public class TimeUnitService {
       });
   }
 
-  public void delete(Long id) {
+  public void delete(Long id) throws EntityNotFoundException {
+
+    checkId(id);
+
     repository.deleteById(id);
+  }
+
+  private void checkId(Long id) throws EntityNotFoundException {
+    if (id == null) {
+      throw new EntityNotFoundException(ENTITY_NAME, "without id");
+    }
   }
 
   private void checkDuplicated(TimeUnit entity)
@@ -62,8 +77,8 @@ public class TimeUnitService {
 
     TimeUnit another = repository.findOneByName(entity.getName());
 
-    if(another != null && !another.getId().equals(entity.getId())) {
-      throw new EntityDuplicatedException("time unit");
+    if (another != null && !another.getId().equals(entity.getId())) {
+      throw new EntityDuplicatedException(ENTITY_NAME);
     }
   }
 
