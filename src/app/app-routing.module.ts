@@ -10,6 +10,7 @@ import { AvailabilityListComponent } from './availability-list/availability-list
 import { AvailabilityFormComponent } from './availability-form/availability-form.component';
 import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
 import { MeasureUnitFormComponent } from './measure-unit-form/measure-unit-form.component';
+import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'measureunits/new', component: MeasureUnitFormComponent },
   { path: 'measureunits/:id', component: MeasureUnitFormComponent },
   { path: 'measureunits', component: MeasureUnitListComponent },
+  { path: 'timeunits', component: TimeUnitListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

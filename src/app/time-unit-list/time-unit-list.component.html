@@ -1,0 +1,41 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3>Time Units</h3>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-hover">
+        <caption>List of time units</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let timeUnit of timeUnits$ | async">
+            <th scope="row">{{ timeUnit.id }}</th>
+            <td>{{ timeUnit.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>
