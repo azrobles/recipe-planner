@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { TimeUnit } from '../models/time-unit.model';
@@ -15,7 +16,8 @@ export class TimeUnitListComponent implements OnInit {
   timeUnits$!: Observable<TimeUnit[]>;
 
   constructor(
-    private timeUnitService: TimeUnitService
+    private timeUnitService: TimeUnitService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class TimeUnitListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoTimeUnitDetail(id: number): void {
+    this.router.navigate(['/timeunits', id]);
   }
 
 }

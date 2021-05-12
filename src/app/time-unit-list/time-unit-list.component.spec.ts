@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { TimeUnit } from '../models/time-unit.model';
@@ -10,6 +11,7 @@ describe('TimeUnitListComponent', () => {
   let component: TimeUnitListComponent;
   let fixture: ComponentFixture<TimeUnitListComponent>;
   let getTimeUnitsSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testTimeUnits: TimeUnit[];
 
   const errorMessage = () => {
@@ -25,11 +27,15 @@ describe('TimeUnitListComponent', () => {
     getTimeUnitsSpy = timeUnitService.getTimeUnits.and
       .returnValue(of(testTimeUnits));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ TimeUnitListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: TimeUnitService, useValue: timeUnitService }
+        { provide: TimeUnitService, useValue: timeUnitService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -76,5 +82,15 @@ describe('TimeUnitListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/timeunits', testTimeUnits[0].id], 'should nav to TimeUnitForm');
+  });
 
 });

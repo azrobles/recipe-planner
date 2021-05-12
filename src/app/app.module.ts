@@ -16,6 +16,7 @@ import { AvailabilityFormComponent } from './availability-form/availability-form
 import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
 import { MeasureUnitFormComponent } from './measure-unit-form/measure-unit-form.component';
 import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component';
+import { TimeUnitFormComponent } from './time-unit-form/time-unit-form.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component
     AvailabilityFormComponent,
     MeasureUnitListComponent,
     MeasureUnitFormComponent,
-    TimeUnitListComponent
+    TimeUnitListComponent,
+    TimeUnitFormComponent
   ],
   imports: [
     BrowserModule,
