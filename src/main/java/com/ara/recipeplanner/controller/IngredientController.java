@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.ara.recipeplanner.dto.AvailabilityDto;
-import com.ara.recipeplanner.dto.AvailabilityDtoMapper;
+import com.ara.recipeplanner.dto.IngredientDto;
+import com.ara.recipeplanner.dto.IngredientDtoMapper;
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
-import com.ara.recipeplanner.service.AvailabilityService;
+import com.ara.recipeplanner.service.IngredientService;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,47 +22,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/availabilities")
+@RequestMapping("/api/ingredients")
 @Validated
-public class AvailabilityController {
+public class IngredientController {
 
-  private final AvailabilityService service;
+  private final IngredientService service;
 
-  public AvailabilityController(AvailabilityService service) {
+  public IngredientController(IngredientService service) {
     this.service = service;
   }
 
   @GetMapping
-  public List<AvailabilityDto> indexController() {
+  public List<IngredientDto> indexController() {
 
     return service.index().stream()
-      .map(AvailabilityDtoMapper::toDto).collect(Collectors.toList());
+      .map(IngredientDtoMapper::toDto).collect(Collectors.toList());
   }
 
   @GetMapping("/{id}")
-  public AvailabilityDto showController(@PathVariable Long id)
+  public IngredientDto showController(@PathVariable Long id)
       throws EntityNotFoundException {
 
-    return AvailabilityDtoMapper.toDto(service.show(id));
+    return IngredientDtoMapper.toDto(service.show(id));
   }
 
   @PostMapping
-  public AvailabilityDto createController(
-      @Valid @RequestBody AvailabilityDto newAvailability)
-      throws EntityDuplicatedException {
+  public IngredientDto createController(
+      @Valid @RequestBody IngredientDto newIngredient)
+      throws EntityDuplicatedException, EntityNotFoundException {
 
-    return AvailabilityDtoMapper.toDto(
-      service.create(AvailabilityDtoMapper.toModel(newAvailability)));
+    return IngredientDtoMapper.toDto(
+      service.create(IngredientDtoMapper.toModel(newIngredient)));
   }
 
   @PutMapping("/{id}")
-  public AvailabilityDto updateController(
-      @Valid @RequestBody AvailabilityDto newAvailability,
-      @PathVariable Long id)
+  public IngredientDto updateController(
+      @Valid @RequestBody IngredientDto newIngredient, @PathVariable Long id)
       throws EntityNotFoundException, EntityDuplicatedException {
 
-    return AvailabilityDtoMapper.toDto(
-      service.update(AvailabilityDtoMapper.toModel(newAvailability), id));
+    return IngredientDtoMapper.toDto(
+      service.update(IngredientDtoMapper.toModel(newIngredient), id));
   }
 
   @DeleteMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.ara.recipeplanner.controller;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doNothing;
@@ -20,7 +21,9 @@ import java.util.List;
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.model.Availability;
-import com.ara.recipeplanner.service.AvailabilityService;
+import com.ara.recipeplanner.model.Ingredient;
+import com.ara.recipeplanner.model.Supermarket;
+import com.ara.recipeplanner.service.IngredientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
@@ -30,11 +33,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AvailabilityController.class)
-class AvailabilityControllerTest {
+@WebMvcTest(IngredientController.class)
+class IngredientControllerTest {
 
-	private static final String BASE_URL = "/api/availabilities";
-  private static final String ENTITY_NAME = "availability";
+	private static final String BASE_URL = "/api/ingredients";
+  private static final String ENTITY_NAME = "ingredient";
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -42,11 +45,11 @@ class AvailabilityControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private AvailabilityService service;
+	private IngredientService service;
 
 	@Test
 	void indexControllerTest() throws Exception {
-		when(service.index()).thenReturn(List.of(new Availability()));
+		when(service.index()).thenReturn(List.of(new Ingredient()));
 
 		this.mockMvc.perform(get(BASE_URL)).andDo(print())
       .andExpect(status().isOk())
@@ -58,7 +61,7 @@ class AvailabilityControllerTest {
 	@Test
 	void showControllerTest() throws Exception {
 		Long id = 1L;
-		when(service.show(id)).thenReturn(new Availability(id, "name"));
+		when(service.show(id)).thenReturn(new Ingredient(id, "name", null, null));
 
 		this.mockMvc.perform(get(BASE_URL + "/{id}", id)).andDo(print())
 			.andExpect(status().isOk())
@@ -84,7 +87,8 @@ class AvailabilityControllerTest {
 	void createControllerTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Availability entity = new Availability(id, name);
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
 		when(service.create(entity)).thenReturn(entity);
 
 		this.mockMvc.perform(post(BASE_URL)
@@ -93,7 +97,9 @@ class AvailabilityControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$").isNotEmpty())
 			.andExpect(jsonPath("$.id").value(id))
-			.andExpect(jsonPath("$.name").value(name));
+			.andExpect(jsonPath("$.name").value(name))
+      .andExpect(jsonPath("$.availability.name").value(name))
+      .andExpect(jsonPath("$.supermarket.name").value(name));
 
 		verify(service, times(1)).create(entity);
 	}
@@ -102,7 +108,8 @@ class AvailabilityControllerTest {
 	void createControllerEntityDuplicatedExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Availability entity = new Availability(id, name);
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
 		when(service.create(entity))
 			.thenThrow(new EntityDuplicatedException(ENTITY_NAME));
 
@@ -117,14 +124,32 @@ class AvailabilityControllerTest {
 	}
 
   @Test
+	void createControllerEntityNotFoundExceptionTest() throws Exception {
+		Long id = 1L;
+		String name = "name";
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
+		when(service.create(entity))
+			.thenThrow(new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
+
+		this.mockMvc.perform(post(BASE_URL)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("Could not find " + ENTITY_NAME + " " + id)));
+
+		verify(service, times(1)).create(entity);
+	}
+
+  @Test
 	void createControllerMethodArgumentNotValidExceptionTest() throws Exception {
-		Availability entity = new Availability(null, null);
+		Ingredient entity = new Ingredient(null, null, null, null);
 
 		this.mockMvc.perform(post(BASE_URL)
       .contentType(MediaType.APPLICATION_JSON)
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$", is("name must not be blank;")));
+			.andExpect(jsonPath("$", containsString("name must not be blank;")));
 
 		verify(service, times(0)).create(entity);
 	}
@@ -133,7 +158,8 @@ class AvailabilityControllerTest {
 	void updateControllerTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Availability entity = new Availability(id, name);
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
 		when(service.update(entity, id)).thenReturn(entity);
 
 		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
@@ -142,7 +168,9 @@ class AvailabilityControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$").isNotEmpty())
 			.andExpect(jsonPath("$.id").value(id))
-			.andExpect(jsonPath("$.name").value(name));
+			.andExpect(jsonPath("$.name").value(name))
+      .andExpect(jsonPath("$.availability.name").value(name))
+      .andExpect(jsonPath("$.supermarket.name").value(name));
 
 		verify(service, times(1)).update(entity, id);
 	}
@@ -151,7 +179,8 @@ class AvailabilityControllerTest {
 	void updateControllerEntityNotFoundExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Availability entity = new Availability(id, name);
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
 		when(service.update(entity, id))
 			.thenThrow(new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
 
@@ -168,7 +197,8 @@ class AvailabilityControllerTest {
 	void updateControllerEntityDuplicatedExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
-		Availability entity = new Availability(id, name);
+		Ingredient entity = new Ingredient(id, name, new Availability(id, name),
+        new Supermarket(id, name));
 		when(service.update(entity, id))
 			.thenThrow(new EntityDuplicatedException(ENTITY_NAME));
 
@@ -185,13 +215,13 @@ class AvailabilityControllerTest {
   @Test
 	void updateControllerMethodArgumentNotValidExceptionTest() throws Exception {
     Long id = 1L;
-		Availability entity = new Availability(id, null);
+		Ingredient entity = new Ingredient(id, null, null, null);
 
 		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
       .contentType(MediaType.APPLICATION_JSON)
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$", is("name must not be blank;")));
+			.andExpect(jsonPath("$", containsString("name must not be blank;")));
 
     verify(service, times(0)).update(entity, id);
 	}

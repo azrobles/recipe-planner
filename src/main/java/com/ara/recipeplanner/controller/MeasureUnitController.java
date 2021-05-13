@@ -58,14 +58,17 @@ public class MeasureUnitController {
   @PutMapping("/{id}")
   public MeasureUnitDto updateController(
       @Valid @RequestBody MeasureUnitDto newMeasureUnit,
-      @PathVariable Long id) throws EntityDuplicatedException {
+      @PathVariable Long id)
+      throws EntityNotFoundException, EntityDuplicatedException {
 
     return MeasureUnitDtoMapper.toDto(
       service.update(MeasureUnitDtoMapper.toModel(newMeasureUnit), id));
   }
 
   @DeleteMapping("/{id}")
-  public void deleteController(@PathVariable Long id) {
+  public void deleteController(@PathVariable Long id)
+      throws EntityNotFoundException {
+
     service.delete(id);
   }
 

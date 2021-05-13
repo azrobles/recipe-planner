@@ -3,6 +3,7 @@ package com.ara.recipeplanner.controller;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,6 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class TimeUnitControllerTest {
 
 	private static final String BASE_URL = "/api/timeunits";
+  private static final String ENTITY_NAME = "time unit";
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -68,13 +70,12 @@ class TimeUnitControllerTest {
 	@Test
 	void showControllerEntityNotFoundExceptionTest() throws Exception {
 		Long id = 1L;
-		String entity = "time unit";
 		when(service.show(id))
-			.thenThrow(new EntityNotFoundException(entity, Long.toString(id)));
+			.thenThrow(new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
 
 		this.mockMvc.perform(get(BASE_URL + "/{id}", id)).andDo(print())
 			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$", is("Could not find " + entity + " " + id)));
+			.andExpect(jsonPath("$", is("Could not find " + ENTITY_NAME + " " + id)));
 
 		verify(service, times(1)).show(id);
 	}
@@ -102,16 +103,15 @@ class TimeUnitControllerTest {
 		Long id = 1L;
 		String name = "name";
 		TimeUnit entity = new TimeUnit(id, name);
-		String entityName = "time unit";
 		when(service.create(entity))
-			.thenThrow(new EntityDuplicatedException(entityName));
+			.thenThrow(new EntityDuplicatedException(ENTITY_NAME));
 
 		this.mockMvc.perform(post(BASE_URL)
       .contentType(MediaType.APPLICATION_JSON)
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is(
-        "Another " + entityName + " with the same identifying data exists")));
+        "Another " + ENTITY_NAME + " with the same identifying data exists")));
 
 		verify(service, times(1)).create(entity);
 	}
@@ -148,20 +148,36 @@ class TimeUnitControllerTest {
 	}
 
   @Test
+	void updateControllerEntityNotFoundExceptionTest() throws Exception {
+		Long id = 1L;
+		String name = "name";
+		TimeUnit entity = new TimeUnit(id, name);
+		when(service.update(entity, id))
+			.thenThrow(new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
+
+		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(mapper.writeValueAsString(entity))).andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("Could not find " + ENTITY_NAME + " " + id)));
+
+		verify(service, times(1)).update(entity, id);
+	}
+
+  @Test
 	void updateControllerEntityDuplicatedExceptionTest() throws Exception {
 		Long id = 1L;
 		String name = "name";
 		TimeUnit entity = new TimeUnit(id, name);
-		String entityName = "time unit";
 		when(service.update(entity, id))
-			.thenThrow(new EntityDuplicatedException(entityName));
+			.thenThrow(new EntityDuplicatedException(ENTITY_NAME));
 
 		this.mockMvc.perform(put(BASE_URL + "/{id}", id)
       .contentType(MediaType.APPLICATION_JSON)
       .content(mapper.writeValueAsString(entity))).andDo(print())
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$", is(
-        "Another " + entityName + " with the same identifying data exists")));
+        "Another " + ENTITY_NAME + " with the same identifying data exists")));
 
 		verify(service, times(1)).update(entity, id);
 	}
@@ -188,6 +204,19 @@ class TimeUnitControllerTest {
 		this.mockMvc.perform(delete(BASE_URL + "/{id}", id)).andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$").doesNotExist());
+
+		verify(service, times(1)).delete(id);
+	}
+
+  @Test
+	void deleteControllerEntityNotFoundExceptionTest() throws Exception {
+		Long id = 1L;
+    doThrow(new EntityNotFoundException(ENTITY_NAME, Long.toString(id)))
+      .when(service).delete(id);;
+
+    this.mockMvc.perform(delete(BASE_URL + "/{id}", id)).andDo(print())
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$", is("Could not find " + ENTITY_NAME + " " + id)));
 
 		verify(service, times(1)).delete(id);
 	}

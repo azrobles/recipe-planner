@@ -58,14 +58,16 @@ public class SupermarketController {
   @PutMapping("/{id}")
   public SupermarketDto updateController(
       @Valid @RequestBody SupermarketDto newSupermarket, @PathVariable Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
 
     return SupermarketDtoMapper.toDto(
       service.update(SupermarketDtoMapper.toModel(newSupermarket), id));
   }
 
   @DeleteMapping("/{id}")
-  public void deleteController(@PathVariable Long id) {
+  public void deleteController(@PathVariable Long id)
+      throws EntityNotFoundException {
+
     service.delete(id);
   }
 

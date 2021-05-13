@@ -58,14 +58,16 @@ public class TimeUnitController {
   @PutMapping("/{id}")
   public TimeUnitDto updateController(
       @Valid @RequestBody TimeUnitDto newTimeUnit, @PathVariable Long id)
-      throws EntityDuplicatedException {
+      throws EntityNotFoundException, EntityDuplicatedException {
 
     return TimeUnitDtoMapper.toDto(
       service.update(TimeUnitDtoMapper.toModel(newTimeUnit), id));
   }
 
   @DeleteMapping("/{id}")
-  public void deleteController(@PathVariable Long id) {
+  public void deleteController(@PathVariable Long id)
+      throws EntityNotFoundException {
+
     service.delete(id);
   }
 
