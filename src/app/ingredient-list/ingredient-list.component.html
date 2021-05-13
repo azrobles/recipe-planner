@@ -1,0 +1,45 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3>Ingredients</h3>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-hover">
+        <caption>List of ingredients</caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Availability</th>
+            <th scope="col">Supermarket</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ingredient of ingredients$ | async">
+            <th scope="row">{{ ingredient.id }}</th>
+            <td>{{ ingredient.name }}</td>
+            <td>{{ ingredient.availability.name }}</td>
+            <td>{{ ingredient.supermarket.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>

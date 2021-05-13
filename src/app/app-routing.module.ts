@@ -12,6 +12,7 @@ import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.
 import { MeasureUnitFormComponent } from './measure-unit-form/measure-unit-form.component';
 import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component';
 import { TimeUnitFormComponent } from './time-unit-form/time-unit-form.component';
+import { IngredientListComponent } from './ingredient-list/ingredient-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'timeunits/new', component: TimeUnitFormComponent },
   { path: 'timeunits/:id', component: TimeUnitFormComponent },
   { path: 'timeunits', component: TimeUnitListComponent },
+  { path: 'ingredients', component: IngredientListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
