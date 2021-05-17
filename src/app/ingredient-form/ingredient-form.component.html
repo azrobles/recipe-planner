@@ -1,0 +1,115 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3 *ngIf="isAddMode">Add Ingredient</h3>
+      <h3 *ngIf="!isAddMode">Edit Ingredient</h3>
+    </div>
+
+    <div *ngIf="!isAddMode" class="col-auto">
+      <button type="button" class="btn btn-danger mb-2 mb-sm-0"
+        (click)="deleteIngredient()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span *ngIf="loading" class="sr-only">Loading...</span>
+        <span *ngIf="!loading">Delete</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="ingredientForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
+
+        <div class="form-group">
+          <label for="nameInput">Name</label>
+          <input type="text" class="form-control" id="nameInput"
+            formControlName="name" required
+            [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched)}"
+            [attr.aria-describedby]="name?.invalid && (name?.dirty || name?.touched) ? 'nameValidationFeedback' : undefined">
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+            id="nameValidationFeedback" class="invalid-feedback">
+            <div *ngIf="name?.errors?.required">
+              Name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="availabilitySelect">Availability</label>
+          <select class="custom-select" id="availabilitySelect"
+            [compareWith]="compareIdFn" formControlName="availability" required
+            [ngClass]="{'is-invalid': availability?.invalid && (availability?.dirty || availability?.touched)}"
+            [attr.aria-describedby]="availability?.invalid && (availability?.dirty || availability?.touched) ? 'availabilityValidationFeedback' : undefined">
+            <option *ngFor="let availability of availabilities$ | async"
+              [ngValue]="availability">
+              {{ availability.name }}
+            </option>
+          </select>
+          <div *ngIf="availability?.invalid && (availability?.dirty || availability?.touched)"
+            id="availabilityValidationFeedback" class="invalid-feedback">
+            <div *ngIf="availability?.errors?.idRequired">
+              Availability is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="supermarketSelect">Supermarket</label>
+          <select class="custom-select" id="supermarketSelect"
+            [compareWith]="compareIdFn" formControlName="supermarket" required
+            [ngClass]="{'is-invalid': supermarket?.invalid && (supermarket?.dirty || supermarket?.touched)}"
+            [attr.aria-describedby]="supermarket?.invalid && (supermarket?.dirty || supermarket?.touched) ? 'supermarketValidationFeedback' : undefined">
+            <option *ngFor="let supermarket of supermarkets$ | async"
+              [ngValue]="supermarket">
+              {{ supermarket.name }}
+            </option>
+          </select>
+          <div *ngIf="supermarket?.invalid && (supermarket?.dirty || supermarket?.touched)"
+            id="supermarketValidationFeedback" class="invalid-feedback">
+            <div *ngIf="supermarket?.errors?.idRequired">
+              Supermarket is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="button" class="btn btn-secondary btn-block"
+              (click)="gotoIngredientList()">
+              Cancel
+            </button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="reset" class="btn btn-secondary btn-block">Reset</button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="submit" class="btn btn-primary btn-block"
+              [disabled]="!ingredientForm.valid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="loading" class="sr-only">Loading...</span>
+              <span *ngIf="!loading">Submit</span>
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>

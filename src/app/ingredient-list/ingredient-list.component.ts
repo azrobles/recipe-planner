@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Ingredient } from '../models/ingredient.model';
@@ -15,7 +16,8 @@ export class IngredientListComponent implements OnInit {
   ingredients$!: Observable<Ingredient[]>;
 
   constructor(
-    private ingredientService: IngredientService
+    private ingredientService: IngredientService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +36,10 @@ export class IngredientListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoIngredientDetail(id: number): void {
+    this.router.navigate(['/ingredients', id]);
   }
 
 }
