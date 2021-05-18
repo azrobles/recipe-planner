@@ -19,6 +19,7 @@ import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component
 import { TimeUnitFormComponent } from './time-unit-form/time-unit-form.component';
 import { IngredientListComponent } from './ingredient-list/ingredient-list.component';
 import { IngredientFormComponent } from './ingredient-form/ingredient-form.component';
+import { LocationListComponent } from './location-list/location-list.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { IngredientFormComponent } from './ingredient-form/ingredient-form.compo
     TimeUnitListComponent,
     TimeUnitFormComponent,
     IngredientListComponent,
-    IngredientFormComponent
+    IngredientFormComponent,
+    LocationListComponent
   ],
   imports: [
     BrowserModule,
