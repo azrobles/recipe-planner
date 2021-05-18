@@ -13,7 +13,7 @@ public class TimeUnitDtoMapper {
       return null;
     }
 
-    TimeUnitDto dto = new TimeUnitDto();
+    var dto = new TimeUnitDto();
     dto.setId(model.getId());
     dto.setName(model.getName());
 

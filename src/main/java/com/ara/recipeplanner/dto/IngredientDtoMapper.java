@@ -13,7 +13,7 @@ public class IngredientDtoMapper {
       return null;
     }
 
-    IngredientDto dto = new IngredientDto();
+    var dto = new IngredientDto();
     dto.setId(model.getId());
     dto.setName(model.getName());
     dto.setAvailability(AvailabilityDtoMapper.toDto(model.getAvailability()));

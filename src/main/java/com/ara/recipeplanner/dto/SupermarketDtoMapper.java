@@ -7,13 +7,13 @@ public class SupermarketDtoMapper {
   private SupermarketDtoMapper() {
     throw new IllegalStateException("Utility class");
   }
-  
+
   public static SupermarketDto toDto(Supermarket model) {
     if (model == null) {
       return null;
     }
 
-    SupermarketDto dto = new SupermarketDto();
+    var dto = new SupermarketDto();
     dto.setId(model.getId());
     dto.setName(model.getName());
 
@@ -24,7 +24,7 @@ public class SupermarketDtoMapper {
     if (dto == null) {
       return null;
     }
-    
+
     return new Supermarket(dto.getId(), dto.getName());
   }
 

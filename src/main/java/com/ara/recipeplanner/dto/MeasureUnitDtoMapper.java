@@ -13,7 +13,7 @@ public class MeasureUnitDtoMapper {
       return null;
     }
 
-    MeasureUnitDto dto = new MeasureUnitDto();
+    var dto = new MeasureUnitDto();
     dto.setId(model.getId());
     dto.setName(model.getName());
 

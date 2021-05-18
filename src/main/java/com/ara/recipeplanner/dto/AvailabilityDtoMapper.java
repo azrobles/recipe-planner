@@ -13,7 +13,7 @@ public class AvailabilityDtoMapper {
       return null;
     }
 
-    AvailabilityDto dto = new AvailabilityDto();
+    var dto = new AvailabilityDto();
     dto.setId(model.getId());
     dto.setName(model.getName());
 
