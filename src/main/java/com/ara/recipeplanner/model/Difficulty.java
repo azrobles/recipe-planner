@@ -5,27 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class Ingredient {
+public class Difficulty {
 
   @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false, length = 50, unique = true)
+  @Column(nullable = false, length = 30, unique = true)
   private String name;
-  @ManyToOne(optional=false)
-  private Availability availability;
-  @ManyToOne(optional=false)
-  private Supermarket supermarket;
 
-  public Ingredient() {}
+  public Difficulty() {}
 
-  public Ingredient(Long id, String name, Availability availability, Supermarket supermarket) {
+  public Difficulty(Long id, String name) {
     this.id = id;
     this.name = name;
-    this.availability = availability;
-    this.supermarket = supermarket;
   }
 
   public Long getId() {
@@ -44,22 +37,6 @@ public class Ingredient {
     this.name = name;
   }
 
-  public Availability getAvailability() {
-    return availability;
-  }
-
-  public void setAvailability(Availability availability) {
-    this.availability = availability;
-  }
-
-  public Supermarket getSupermarket() {
-    return supermarket;
-  }
-
-  public void setSupermarket(Supermarket supermarket) {
-    this.supermarket = supermarket;
-  }
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -68,7 +45,7 @@ public class Ingredient {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Ingredient other = (Ingredient) obj;
+    Difficulty other = (Difficulty) obj;
     if (name == null) {
       if (other.name != null)
         return false;
@@ -87,9 +64,7 @@ public class Ingredient {
 
   @Override
   public String toString() {
-    return "Ingredient [id=" + id + ", name=" + name
-        + ", availability=" + availability.getName()
-        + ", supermarket=" + supermarket.getName() + "]";
+    return "Difficulty [id=" + id + ", name=" + name + "]";
   }
 
 }
