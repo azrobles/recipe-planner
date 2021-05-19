@@ -4,27 +4,27 @@ import java.util.List;
 
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
-import com.ara.recipeplanner.model.Location;
-import com.ara.recipeplanner.repository.LocationRepository;
+import com.ara.recipeplanner.model.Difficulty;
+import com.ara.recipeplanner.repository.DifficultyRepository;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class LocationService {
+public class DifficultyService {
 
-  private static final String ENTITY_NAME = "location";
+  private static final String ENTITY_NAME = "difficulty";
 
-  private final LocationRepository repository;
+  private final DifficultyRepository repository;
 
-  public LocationService(LocationRepository repository) {
+  public DifficultyService(DifficultyRepository repository) {
     this.repository = repository;
   }
 
-  public List<Location> index() {
+  public List<Difficulty> index() {
     return repository.findAll();
   }
 
-  public Location show(Long id) throws EntityNotFoundException {
+  public Difficulty show(Long id) throws EntityNotFoundException {
 
     checkId(id);
 
@@ -33,7 +33,7 @@ public class LocationService {
         new EntityNotFoundException(ENTITY_NAME, Long.toString(id)));
   }
 
-  public Location create(Location entity)
+  public Difficulty create(Difficulty entity)
       throws EntityDuplicatedException {
 
     checkDuplicated(entity);
@@ -41,7 +41,7 @@ public class LocationService {
     return repository.save(entity);
   }
 
-  public Location update(Location entity, Long id)
+  public Difficulty update(Difficulty entity, Long id)
       throws EntityNotFoundException, EntityDuplicatedException {
 
     checkId(id);
@@ -72,10 +72,10 @@ public class LocationService {
     }
   }
 
-  private void checkDuplicated(Location entity)
+  private void checkDuplicated(Difficulty entity)
       throws EntityDuplicatedException {
 
-    Location another = repository.findOneByName(entity.getName());
+    Difficulty another = repository.findOneByName(entity.getName());
 
     if (another != null && !another.getId().equals(entity.getId())) {
       throw new EntityDuplicatedException(ENTITY_NAME);
