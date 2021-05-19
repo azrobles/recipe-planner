@@ -44,6 +44,7 @@ export class IngredientFormComponent implements OnInit {
 
     this.ingredientForm = this.fb.group(this.ingredient);
     this.name!.setValidators(Validators.required);
+    this.name!.setValidators(Validators.maxLength(50));
     this.availability!.setValidators(idRequiredValidator());
     this.supermarket!.setValidators(idRequiredValidator());
 

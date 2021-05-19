@@ -3,13 +3,13 @@
   <div class="row">
 
     <div class="col-auto mr-auto">
-      <h3 *ngIf="isAddMode">Add Measure Unit</h3>
-      <h3 *ngIf="!isAddMode">Edit Measure Unit</h3>
+      <h3 *ngIf="isAddMode">Add Location</h3>
+      <h3 *ngIf="!isAddMode">Edit Location</h3>
     </div>
 
     <div *ngIf="!isAddMode" class="col-auto">
       <button type="button" class="btn btn-danger mb-2 mb-sm-0"
-        (click)="deleteMeasureUnit()" [disabled]="loading">
+        (click)="deleteLocation()" [disabled]="loading">
         <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         <span *ngIf="loading" class="sr-only">Loading...</span>
         <span *ngIf="!loading">Delete</span>
@@ -20,7 +20,7 @@
 
   <div class="row">
     <div class="col">
-      <form [formGroup]="measureUnitForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
+      <form [formGroup]="locationForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
 
         <div class="form-group">
           <label for="nameInput">Name</label>
@@ -34,7 +34,7 @@
               Name is required.
             </div>
             <div *ngIf="name?.errors?.maxlength">
-              Name can be at most 30 characters long.
+              Name can be at most 50 characters long.
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
 
           <div class="col-4 col-sm-3 col-md-2 col-xl-1">
             <button type="button" class="btn btn-secondary btn-block"
-              (click)="gotoMeasureUnitList()">
+              (click)="gotoLocationList()">
               Cancel
             </button>
           </div>
@@ -54,7 +54,7 @@
 
           <div class="col-4 col-sm-3 col-md-2 col-xl-1">
             <button type="submit" class="btn btn-primary btn-block"
-              [disabled]="!measureUnitForm.valid || loading">
+              [disabled]="!locationForm.valid || loading">
               <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span *ngIf="loading" class="sr-only">Loading...</span>
               <span *ngIf="!loading">Submit</span>

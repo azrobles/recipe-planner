@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Location } from '../models/location.model';
@@ -15,7 +16,8 @@ export class LocationListComponent implements OnInit {
   locations$!: Observable<Location[]>;
 
   constructor(
-    private locationService: LocationService
+    private locationService: LocationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class LocationListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoLocationDetail(id: number): void {
+    this.router.navigate(['/locations', id]);
   }
 
 }

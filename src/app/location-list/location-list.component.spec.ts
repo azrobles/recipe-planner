@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { Location } from '../models/location.model';
@@ -26,11 +27,15 @@ describe('LocationListComponent', () => {
     getLocationsSpy = locationService.getLocations.and
       .returnValue(of(testLocations));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ LocationListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: LocationService, useValue: locationService }
+        { provide: LocationService, useValue: locationService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -77,5 +82,15 @@ describe('LocationListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/locations', testLocations[0].id], 'should nav to LocationForm');
+  });
 
 });

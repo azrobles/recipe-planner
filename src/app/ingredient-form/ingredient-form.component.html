@@ -33,6 +33,9 @@
             <div *ngIf="name?.errors?.required">
               Name is required.
             </div>
+            <div *ngIf="name?.errors?.maxlength">
+              Name can be at most 50 characters long.
+            </div>
           </div>
         </div>
 

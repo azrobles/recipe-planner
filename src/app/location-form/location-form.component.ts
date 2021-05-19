@@ -1,51 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Availability } from '../models/availability.model';
-import { AvailabilityService } from '../services/availability.service';
+import { Location } from '../models/location.model';
+import { LocationService } from '../services/location.service';
 
 @Component({
-  selector: 'app-availability-form',
-  templateUrl: './availability-form.component.html',
-  styleUrls: ['./availability-form.component.css']
+  selector: 'app-location-form',
+  templateUrl: './location-form.component.html',
+  styleUrls: ['./location-form.component.css']
 })
-export class AvailabilityFormComponent implements OnInit {
+export class LocationFormComponent implements OnInit {
 
   errorMessage!: string;
-  availability!: Availability;
-  availabilityForm!: FormGroup;
+  location!: Location;
+  locationForm!: FormGroup;
   isAddMode!: boolean;
   loading = false;
 
   constructor(
-    private availabilityService: AvailabilityService,
+    private locationService: LocationService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.clearAvailability();
+    this.clearLocation();
 
-    this.availabilityForm = this.fb.group(this.availability);
+    this.locationForm = this.fb.group(this.location);
     this.name!.setValidators(Validators.required);
-    this.name!.setValidators(Validators.maxLength(30));
+    this.name!.setValidators(Validators.maxLength(50));
 
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));
     this.isAddMode = !id;
     if(!this.isAddMode) {
-      this.getAvailability(id);
+      this.getLocation(id);
     }
   }
 
-  private getAvailability(id: number): void {
+  private getLocation(id: number): void {
     this.loading = true;
-    this.availabilityService.getAvailability(id).subscribe({
+    this.locationService.getLocation(id).subscribe({
       next: data => {
         if(data) {
-          this.availability = data;
-          this.availabilityForm.setValue(this.availability);
+          this.location = data;
+          this.locationForm.setValue(this.location);
         } else {
           this.isAddMode = true;
         }
@@ -59,31 +59,31 @@ export class AvailabilityFormComponent implements OnInit {
     });
   }
 
-  get name() { return this.availabilityForm.get('name'); }
+  get name() { return this.locationForm.get('name'); }
 
   onSubmit(): void {
     if(this.isAddMode) {
-      this.addAvailability();
+      this.addLocation();
     } else {
-      this.updateAvailability();
+      this.updateLocation();
     }
   }
 
   onReset($event: Event): void {
     $event.preventDefault();
-    this.availabilityForm.reset(this.availability);
+    this.locationForm.reset(this.location);
   }
 
-  clearAvailability(): void {
+  clearLocation(): void {
     this.errorMessage = '';
-    this.availability = this.availabilityService.clearAvailability();
+    this.location = this.locationService.clearLocation();
   }
 
-  addAvailability(): void {
+  addLocation(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.availabilityService.addAvailability(this.availabilityForm.value).subscribe({
-      next: data => this.gotoAvailabilityList(),
+    this.locationService.addLocation(this.locationForm.value).subscribe({
+      next: data => this.gotoLocationList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -91,11 +91,11 @@ export class AvailabilityFormComponent implements OnInit {
     });
   }
 
-  updateAvailability(): void {
+  updateLocation(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.availabilityService.updateAvailability(this.availabilityForm.value).subscribe({
-      next: data => this.gotoAvailabilityList(),
+    this.locationService.updateLocation(this.locationForm.value).subscribe({
+      next: data => this.gotoLocationList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -103,11 +103,11 @@ export class AvailabilityFormComponent implements OnInit {
     });
   }
 
-  deleteAvailability(): void {
+  deleteLocation(): void {
     this.loading = true;
     this.errorMessage = '';
-    this.availabilityService.deleteAvailability(this.availability.id!).subscribe({
-      next: data => this.gotoAvailabilityList(),
+    this.locationService.deleteLocation(this.location.id!).subscribe({
+      next: data => this.gotoLocationList(),
       error: (err: any) => {
         this.errorMessage = err.message || err.toString();
         this.loading = false;
@@ -115,8 +115,8 @@ export class AvailabilityFormComponent implements OnInit {
     });
   }
 
-  gotoAvailabilityList(): void {
-    this.router.navigate(['/availabilities']);
+  gotoLocationList(): void {
+    this.router.navigate(['/locations']);
   }
 
 }

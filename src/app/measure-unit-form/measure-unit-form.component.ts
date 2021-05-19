@@ -29,6 +29,7 @@ export class MeasureUnitFormComponent implements OnInit {
 
     this.measureUnitForm = this.fb.group(this.measureUnit);
     this.name!.setValidators(Validators.required);
+    this.name!.setValidators(Validators.maxLength(30));
 
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));

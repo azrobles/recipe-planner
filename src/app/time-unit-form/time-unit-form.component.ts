@@ -29,6 +29,7 @@ export class TimeUnitFormComponent implements OnInit {
 
     this.timeUnitForm = this.fb.group(this.timeUnit);
     this.name!.setValidators(Validators.required);
+    this.name!.setValidators(Validators.maxLength(30));
 
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));

@@ -29,6 +29,7 @@ export class SupermarketFormComponent implements OnInit {
 
     this.supermarketForm = this.fb.group(this.supermarket);
     this.name!.setValidators(Validators.required);
+    this.name!.setValidators(Validators.maxLength(30));
 
     const routeParams = this.route.snapshot.paramMap;
     const id = Number(routeParams.get('id'));
