@@ -21,6 +21,7 @@ import { IngredientListComponent } from './ingredient-list/ingredient-list.compo
 import { IngredientFormComponent } from './ingredient-form/ingredient-form.component';
 import { LocationListComponent } from './location-list/location-list.component';
 import { LocationFormComponent } from './location-form/location-form.component';
+import { DifficultyListComponent } from './difficulty-list/difficulty-list.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LocationFormComponent } from './location-form/location-form.component';
     IngredientListComponent,
     IngredientFormComponent,
     LocationListComponent,
-    LocationFormComponent
+    LocationFormComponent,
+    DifficultyListComponent
   ],
   imports: [
     BrowserModule,
