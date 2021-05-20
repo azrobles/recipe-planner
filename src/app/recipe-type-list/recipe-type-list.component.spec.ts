@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { RecipeType } from '../models/recipe-type.model';
@@ -10,6 +11,7 @@ describe('RecipeTypeListComponent', () => {
   let component: RecipeTypeListComponent;
   let fixture: ComponentFixture<RecipeTypeListComponent>;
   let getRecipeTypesSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testRecipeTypes: RecipeType[];
 
   const errorMessage = () => {
@@ -25,11 +27,15 @@ describe('RecipeTypeListComponent', () => {
     getRecipeTypesSpy = recipeTypeService.getRecipeTypes.and
       .returnValue(of(testRecipeTypes));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ RecipeTypeListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: RecipeTypeService, useValue: recipeTypeService }
+        { provide: RecipeTypeService, useValue: recipeTypeService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -76,5 +82,15 @@ describe('RecipeTypeListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/recipetypes', testRecipeTypes[0].id], 'should nav to RecipeTypeForm');
+  });
 
 });
