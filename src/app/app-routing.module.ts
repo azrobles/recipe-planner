@@ -18,6 +18,7 @@ import { LocationListComponent } from './location-list/location-list.component';
 import { LocationFormComponent } from './location-form/location-form.component';
 import { DifficultyListComponent } from './difficulty-list/difficulty-list.component';
 import { DifficultyFormComponent } from './difficulty-form/difficulty-form.component';
+import { SeasonListComponent } from './season-list/season-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path: 'difficulties/new', component: DifficultyFormComponent },
   { path: 'difficulties/:id', component: DifficultyFormComponent },
   { path: 'difficulties', component: DifficultyListComponent },
+  { path: 'seasons', component: SeasonListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
