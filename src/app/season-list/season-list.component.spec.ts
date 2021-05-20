@@ -1,4 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { of, throwError } from 'rxjs';
 import { Season } from '../models/season.model';
@@ -10,6 +11,7 @@ describe('SeasonListComponent', () => {
   let component: SeasonListComponent;
   let fixture: ComponentFixture<SeasonListComponent>;
   let getSeasonsSpy: jasmine.Spy;
+  let navigateSpy: jasmine.Spy;
   let testSeasons: Season[];
 
   const errorMessage = () => {
@@ -25,11 +27,15 @@ describe('SeasonListComponent', () => {
     getSeasonsSpy = seasonService.getSeasons.and
       .returnValue(of(testSeasons));
 
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    navigateSpy = routerSpy.navigate;
+
     await TestBed.configureTestingModule({
       declarations: [ SeasonListComponent ],
       imports: [ NgbModule ],
       providers: [
-        { provide: SeasonService, useValue: seasonService }
+        { provide: SeasonService, useValue: seasonService },
+        { provide: Router, useValue: routerSpy }
       ]
     })
     .compileComponents();
@@ -76,5 +82,15 @@ describe('SeasonListComponent', () => {
     expect(fixture.nativeElement.querySelector('table>tbody>tr'))
       .toBeFalsy('nothing displayed');
   }));
+
+  it('should navigate when click row', () => {
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('table>tbody>tr').click();
+
+    expect(navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+
+    const navArgs = navigateSpy.calls.first().args[0];
+    expect(navArgs).toEqual(['/seasons', testSeasons[0].id], 'should nav to SeasonForm');
+  });
 
 });

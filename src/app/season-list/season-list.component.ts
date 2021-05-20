@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Season } from '../models/season.model';
@@ -15,7 +16,8 @@ export class SeasonListComponent implements OnInit {
   seasons$!: Observable<Season[]>;
 
   constructor(
-    private seasonService: SeasonService
+    private seasonService: SeasonService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class SeasonListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoSeasonDetail(id: number): void {
+    this.router.navigate(['/seasons', id]);
   }
 
 }

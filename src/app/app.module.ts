@@ -24,6 +24,7 @@ import { LocationFormComponent } from './location-form/location-form.component';
 import { DifficultyListComponent } from './difficulty-list/difficulty-list.component';
 import { DifficultyFormComponent } from './difficulty-form/difficulty-form.component';
 import { SeasonListComponent } from './season-list/season-list.component';
+import { SeasonFormComponent } from './season-form/season-form.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SeasonListComponent } from './season-list/season-list.component';
     LocationFormComponent,
     DifficultyListComponent,
     DifficultyFormComponent,
-    SeasonListComponent
+    SeasonListComponent,
+    SeasonFormComponent
   ],
   imports: [
     BrowserModule,
