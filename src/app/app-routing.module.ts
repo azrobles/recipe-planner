@@ -20,6 +20,7 @@ import { DifficultyListComponent } from './difficulty-list/difficulty-list.compo
 import { DifficultyFormComponent } from './difficulty-form/difficulty-form.component';
 import { SeasonListComponent } from './season-list/season-list.component';
 import { SeasonFormComponent } from './season-form/season-form.component';
+import { RecipeTypeListComponent } from './recipe-type-list/recipe-type-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -49,6 +50,7 @@ const routes: Routes = [
   { path: 'seasons/new', component: SeasonFormComponent },
   { path: 'seasons/:id', component: SeasonFormComponent },
   { path: 'seasons', component: SeasonListComponent },
+  { path: 'recipetypes', component: RecipeTypeListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

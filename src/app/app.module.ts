@@ -25,6 +25,7 @@ import { DifficultyListComponent } from './difficulty-list/difficulty-list.compo
 import { DifficultyFormComponent } from './difficulty-form/difficulty-form.component';
 import { SeasonListComponent } from './season-list/season-list.component';
 import { SeasonFormComponent } from './season-form/season-form.component';
+import { RecipeTypeListComponent } from './recipe-type-list/recipe-type-list.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { SeasonFormComponent } from './season-form/season-form.component';
     DifficultyListComponent,
     DifficultyFormComponent,
     SeasonListComponent,
-    SeasonFormComponent
+    SeasonFormComponent,
+    RecipeTypeListComponent
   ],
   imports: [
     BrowserModule,
