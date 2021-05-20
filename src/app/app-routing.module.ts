@@ -17,6 +17,7 @@ import { IngredientFormComponent } from './ingredient-form/ingredient-form.compo
 import { LocationListComponent } from './location-list/location-list.component';
 import { LocationFormComponent } from './location-form/location-form.component';
 import { DifficultyListComponent } from './difficulty-list/difficulty-list.component';
+import { DifficultyFormComponent } from './difficulty-form/difficulty-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -40,6 +41,8 @@ const routes: Routes = [
   { path: 'locations/new', component: LocationFormComponent },
   { path: 'locations/:id', component: LocationFormComponent },
   { path: 'locations', component: LocationListComponent },
+  { path: 'difficulties/new', component: DifficultyFormComponent },
+  { path: 'difficulties/:id', component: DifficultyFormComponent },
   { path: 'difficulties', component: DifficultyListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];

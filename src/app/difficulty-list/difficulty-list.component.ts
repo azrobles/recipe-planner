@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith } from 'rxjs/operators';
 import { Difficulty } from '../models/difficulty.model';
@@ -15,7 +16,8 @@ export class DifficultyListComponent implements OnInit {
   difficulties$!: Observable<Difficulty[]>;
 
   constructor(
-    private difficultyService: DifficultyService
+    private difficultyService: DifficultyService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,10 @@ export class DifficultyListComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  gotoDifficultyDetail(id: number): void {
+    this.router.navigate(['/difficulties', id]);
   }
 
 }
