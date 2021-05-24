@@ -12,10 +12,13 @@ public class Ingredient {
 
   @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
+
   @Column(nullable = false, length = 50, unique = true)
   private String name;
+
   @ManyToOne(optional=false)
   private Availability availability;
+
   @ManyToOne(optional=false)
   private Supermarket supermarket;
 
@@ -61,6 +64,14 @@ public class Ingredient {
   }
 
   @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
   public boolean equals(Object obj) {
     if (this == obj)
       return true;
@@ -75,14 +86,6 @@ public class Ingredient {
     } else if (!name.equals(other.name))
       return false;
     return true;
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    return result;
   }
 
   @Override
