@@ -12,12 +12,15 @@ public class IngredientDto implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private Long id;
+
   @NotBlank
   @Size(min = 1, max = 50)
   private String name;
+
   @NotNull
   @Valid
   private AvailabilityDto availability;
+
   @NotNull
   @Valid
   private SupermarketDto supermarket;

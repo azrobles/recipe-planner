@@ -10,6 +10,7 @@ public class SupermarketDto implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private Long id;
+
   @NotBlank
   @Size(min = 1, max = 30)
   private String name;

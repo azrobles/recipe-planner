@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(uniqueConstraints =
     @UniqueConstraint(columnNames = { "name", "location_id" }))
@@ -58,6 +60,7 @@ public class Recipe {
     cascade = CascadeType.ALL,
     orphanRemoval = true
   )
+  @JsonManagedReference
   private List<IngredientQuantity> ingredients = new ArrayList<>();
 
   public Long getId() {
