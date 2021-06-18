@@ -1,26 +1,26 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { TimeUnit } from '../models/time-unit.model';
+import { Recipe } from '../models/recipe.model';
 
-import { TimeUnitService } from './time-unit.service';
+import { RecipeService } from './recipe.service';
 
-const testUrl = '/api/timeunits';
+const testUrl = '/api/recipes';
 
-describe('TimeUnitService', () => {
+describe('RecipeService', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
-  let service: TimeUnitService;
+  let service: RecipeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ TimeUnitService ]
+      providers: [ RecipeService ]
     });
 
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(TimeUnitService);
+    service = TestBed.inject(RecipeService);
   });
 
   afterEach(() => {
@@ -31,27 +31,38 @@ describe('TimeUnitService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#clearTimeUnit', () => {
-    let testData: TimeUnit = { id: undefined, name: '' };
+  describe('#clearRecipe', () => {
+    let testData: Recipe = { id: undefined, name: '',
+      location: { id: undefined, name: '' },
+      type: { id: undefined, name: '' },
+      season: { id: undefined, name: '' },
+      difficulty: { id: undefined, name: '' },
+      frequency: 0,
+      ingredients: []
+    };
 
-    it('should return cleared time unit', () => {
-      expect(service.clearTimeUnit()).toEqual(testData, 'should return cleared time unit');
+    it('should return cleared recipe', () => {
+      expect(service.clearRecipe()).toEqual(testData, 'should return cleared recipe');
     });
   });
 
-  describe('#getTimeUnits', () => {
-    let testData: TimeUnit[];
+  describe('#getRecipes', () => {
+    let testData: Recipe[];
 
     beforeEach(() => {
       testData = [
-        { id: 1, name: 'A' },
-        { id: 2, name: 'B' }
-       ] as TimeUnit[];
+        { id: 1, name: 'A', location: { id: 1, name: 'A' },
+          type: { id: 1, name: 'A' }, season: { id: 1, name: 'A' },
+          difficulty: { id: 1, name: 'A' }, frequency: 1, ingredients: [] },
+        { id: 2, name: 'B', location: { id: 1, name: 'A' },
+          type: { id: 1, name: 'A' }, season: { id: 1, name: 'A' },
+          difficulty: { id: 1, name: 'A' }, frequency: 1, ingredients: [] }
+       ] as Recipe[];
     });
 
-    it('should return expected time units (called once)', () => {
-      service.getTimeUnits().subscribe(
-        data => expect(data).toEqual(testData, 'should return expected time units'),
+    it('should return expected recipes (called once)', () => {
+      service.getRecipes().subscribe(
+        data => expect(data).toEqual(testData, 'should return expected recipes'),
         fail
       );
 
@@ -61,9 +72,9 @@ describe('TimeUnitService', () => {
       req.flush(testData);
     });
 
-    it('should be OK returning no time units', () => {
-      service.getTimeUnits().subscribe(
-        data => expect(data.length).toEqual(0, 'should have empty time units array'),
+    it('should be OK returning no recipes', () => {
+      service.getRecipes().subscribe(
+        data => expect(data.length).toEqual(0, 'should have empty recipes array'),
         fail
       );
 
@@ -74,7 +85,7 @@ describe('TimeUnitService', () => {
     it('should turn 404 into a user-friendly error', () => {
       const msg = 'Deliberate 404';
 
-      service.getTimeUnits().subscribe(
+      service.getRecipes().subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -83,16 +94,16 @@ describe('TimeUnitService', () => {
       req.flush(msg, { status: 404, statusText: 'Not Found' });
     });
 
-    it('should return expected time units (called multiple times)', () => {
-      service.getTimeUnits().subscribe();
-      service.getTimeUnits().subscribe();
-      service.getTimeUnits().subscribe(
-        data => expect(data).toEqual(testData, 'should return expected time units'),
+    it('should return expected recipes (called multiple times)', () => {
+      service.getRecipes().subscribe();
+      service.getRecipes().subscribe();
+      service.getRecipes().subscribe(
+        data => expect(data).toEqual(testData, 'should return expected recipes'),
         fail
       );
 
       const requests = httpTestingController.match(testUrl);
-      expect(requests.length).toEqual(3, 'calls to getTimeUnits()');
+      expect(requests.length).toEqual(3, 'calls to getRecipes()');
 
       requests[0].flush([]);
       requests[1].flush([{ id: 1, name: 'Test Data' }]);
@@ -100,13 +111,20 @@ describe('TimeUnitService', () => {
     });
   });
 
-  describe('#getTimeUnit', () => {
-    it('should return expected time unit', () => {
+  describe('#getRecipe', () => {
+    it('should return expected recipe', () => {
       const id = 1;
-      const testData: TimeUnit = { id: id, name: 'A' };
+      const testData: Recipe = { id: id, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.getTimeUnit(id).subscribe(
-        data => expect(data).toEqual(testData, 'should return the time unit'),
+      service.getRecipe(id).subscribe(
+        data => expect(data).toEqual(testData, 'should return the recipe'),
         fail
       );
 
@@ -120,7 +138,7 @@ describe('TimeUnitService', () => {
       const id = 1;
       const msg = 'Deliberate 404';
 
-      service.getTimeUnit(id).subscribe(
+      service.getRecipe(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -133,7 +151,7 @@ describe('TimeUnitService', () => {
       const id = 1;
       const emsg = 'simulated network error';
 
-      service.getTimeUnit(id).subscribe(
+      service.getRecipe(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -145,12 +163,19 @@ describe('TimeUnitService', () => {
     });
   });
 
-  describe('#addTimeUnit', () => {
-    it('should create a time unit and return it', () => {
-      const testData: TimeUnit = { id: 1, name: 'A' };
+  describe('#addRecipe', () => {
+    it('should create a recipe and return it', () => {
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.addTimeUnit(testData).subscribe(
-        data => expect(data).toEqual(testData, 'should return the time unit'),
+      service.addRecipe(testData).subscribe(
+        data => expect(data).toEqual(testData, 'should return the recipe'),
         fail
       );
 
@@ -165,9 +190,16 @@ describe('TimeUnitService', () => {
 
     it('should turn 404 error into user-facing error', () => {
       const msg = 'Deliberate 404';
-      const testData: TimeUnit = { id: 1, name: 'A' };
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.addTimeUnit(testData).subscribe(
+      service.addRecipe(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -178,9 +210,16 @@ describe('TimeUnitService', () => {
 
     it('should turn network error into user-facing error', () => {
       const emsg = 'simulated network error';
-      const testData: TimeUnit = { id: 1, name: 'A' };
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.addTimeUnit(testData).subscribe(
+      service.addRecipe(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -192,12 +231,19 @@ describe('TimeUnitService', () => {
     });
   });
 
-  describe('#updateTimeUnit', () => {
-    it('should update a time unit and return it', () => {
-      const testData: TimeUnit = { id: 1, name: 'A' };
+  describe('#updateRecipe', () => {
+    it('should update a recipe and return it', () => {
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.updateTimeUnit(testData).subscribe(
-        data => expect(data).toEqual(testData, 'should return the time unit'),
+      service.updateRecipe(testData).subscribe(
+        data => expect(data).toEqual(testData, 'should return the recipe'),
         fail
       );
 
@@ -212,9 +258,16 @@ describe('TimeUnitService', () => {
 
     it('should turn 404 error into user-facing error', () => {
       const msg = 'Deliberate 404';
-      const testData: TimeUnit = { id: 1, name: 'A' };
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.updateTimeUnit(testData).subscribe(
+      service.updateRecipe(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -225,9 +278,16 @@ describe('TimeUnitService', () => {
 
     it('should turn network error into user-facing error', () => {
       const emsg = 'simulated network error';
-      const testData: TimeUnit = { id: 1, name: 'A' };
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.updateTimeUnit(testData).subscribe(
+      service.updateRecipe(testData).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );
@@ -239,13 +299,20 @@ describe('TimeUnitService', () => {
     });
   });
 
-  describe('#deleteTimeUnit', () => {
-    it('should delete a time unit', () => {
+  describe('#deleteRecipe', () => {
+    it('should delete a recipe', () => {
       const id = 1;
-      const testData: TimeUnit = { id: id, name: 'A' };
+      const testData: Recipe = { id: 1, name: 'A',
+        location: { id: 1, name: 'A' },
+        type: { id: 1, name: 'A' },
+        season: { id: 1, name: 'A' },
+        difficulty: { id: 1, name: 'A' },
+        frequency: 1,
+        ingredients: []
+      };
 
-      service.deleteTimeUnit(id).subscribe(
-        data => expect(data).toEqual(testData, 'should delete the time unit'),
+      service.deleteRecipe(id).subscribe(
+        data => expect(data).toEqual(testData, 'should delete the recipe'),
         fail
       );
 
@@ -259,7 +326,7 @@ describe('TimeUnitService', () => {
       const id = 1;
       const msg = 'Deliberate 404';
 
-      service.deleteTimeUnit(id).subscribe(
+      service.deleteRecipe(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(msg)
       );
@@ -272,7 +339,7 @@ describe('TimeUnitService', () => {
       const id = 1;
       const emsg = 'simulated network error';
 
-      service.deleteTimeUnit(id).subscribe(
+      service.deleteRecipe(id).subscribe(
         data => fail('expected to fail'),
         error => expect(error).toContain(emsg)
       );

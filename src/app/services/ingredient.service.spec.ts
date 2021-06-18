@@ -50,7 +50,7 @@ describe('IngredientService', () => {
         { id: 1, name: 'A', availability: { id: 1, name: 'A' },
           supermarket: { id: 1, name: 'A' } },
         { id: 2, name: 'B', availability: { id: 1, name: 'A' },
-          supermarket: { id: 1, name: 'A' } },
+          supermarket: { id: 1, name: 'A' } }
        ] as Ingredient[];
     });
 

@@ -45,7 +45,7 @@ describe('SeasonService', () => {
     beforeEach(() => {
       testData = [
         { id: 1, name: 'A' },
-        { id: 2, name: 'B' },
+        { id: 2, name: 'B' }
        ] as Season[];
     });
 
