@@ -30,6 +30,15 @@
         </li>
 
         <li class="nav-item">
+          <a class="nav-link" routerLink="/recipes" routerLinkActive="active"
+            #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+            [attr.aria-current]="rla.isActive ? 'page' : undefined"
+            (click)="isCollapsed = true">
+            Recipes
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link" routerLink="/admin" routerLinkActive="active"
             #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
             [attr.aria-current]="rla.isActive ? 'page' : undefined"
