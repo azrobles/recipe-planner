@@ -47,8 +47,6 @@ class RecipeServiceTest {
   @Mock
   private DifficultyService difficultyService;
   @Mock
-  private TimeUnitService timeUnitService;
-  @Mock
   private IngredientQuantityService ingredientQuantityService;
 
   @Test

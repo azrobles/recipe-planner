@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ara.recipeplanner.model.Difficulty;
-import com.ara.recipeplanner.model.Duration;
 import com.ara.recipeplanner.model.Ingredient;
 import com.ara.recipeplanner.model.Location;
 import com.ara.recipeplanner.model.Quantity;
@@ -26,7 +25,6 @@ class RecipeDtoMapperTest {
     model.setType(new RecipeType());
     model.setSeason(new Season());
     model.setDifficulty(new Difficulty());
-    model.setDuration(new Duration());
     model.setFrequency(1L);
 
     model.addIngredient(new Ingredient(), new Quantity(), false);
@@ -39,7 +37,6 @@ class RecipeDtoMapperTest {
     assertNotNull(dto.getType());
     assertNotNull(dto.getSeason());
     assertNotNull(dto.getDifficulty());
-    assertNotNull(dto.getDuration());
     assertEquals(model.getFrequency(), dto.getFrequency());
 
     assertEquals(model.getIngredients().size(), dto.getIngredients().size());
@@ -54,7 +51,6 @@ class RecipeDtoMapperTest {
     dto.setType(new RecipeTypeDto());
     dto.setSeason(new SeasonDto());
     dto.setDifficulty(new DifficultyDto());
-    dto.setDuration(new DurationDto());
     dto.setFrequency(1L);
 
     dto.getIngredients().add(new RecipeIngredientQuantityDto());
@@ -67,7 +63,6 @@ class RecipeDtoMapperTest {
     assertNotNull(model.getType());
     assertNotNull(model.getSeason());
     assertNotNull(model.getDifficulty());
-    assertNotNull(model.getDuration());
     assertEquals(dto.getFrequency(), model.getFrequency());
 
     assertEquals(dto.getIngredients().size(), model.getIngredients().size());

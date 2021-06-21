@@ -35,9 +35,6 @@ public class RecipeDto implements Serializable {
   @Valid
   private DifficultyDto difficulty;
 
-  @Valid
-  private DurationDto duration;
-
   @NotNull
   private Long frequency;
 
@@ -89,14 +86,6 @@ public class RecipeDto implements Serializable {
 
   public void setDifficulty(DifficultyDto difficulty) {
     this.difficulty = difficulty;
-  }
-
-  public DurationDto getDuration() {
-    return duration;
-  }
-
-  public void setDuration(DurationDto duration) {
-    this.duration = duration;
   }
 
   public Long getFrequency() {

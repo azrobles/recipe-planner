@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,14 +39,6 @@ public class Recipe {
 
   @ManyToOne(optional=false)
   private Difficulty difficulty;
-
-  @Embedded
-  @AttributeOverride(name = "amount", column = @Column(nullable = true))
-  @AssociationOverride(
-    name = "timeUnit",
-    joinColumns = @JoinColumn(nullable = true)
-  )
-  private Duration duration;
 
   @Column(nullable = false)
   private Long frequency;
@@ -109,14 +97,6 @@ public class Recipe {
 
   public void setDifficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
-  }
-
-  public Duration getDuration() {
-    return duration;
-  }
-
-  public void setDuration(Duration duration) {
-    this.duration = duration;
   }
 
   public Long getFrequency() {
@@ -197,7 +177,6 @@ public class Recipe {
         + ", type=" + type.getName()
         + ", season=" + season.getName()
         + ", difficulty=" + difficulty.getName()
-        + ", duration=" + duration
         + ", frequency=" + frequency
         + ", ingredients=" + ingredients + "]";
   }

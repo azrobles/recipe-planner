@@ -5,7 +5,6 @@ import java.util.List;
 import com.ara.recipeplanner.exception.EntityDuplicatedException;
 import com.ara.recipeplanner.exception.EntityNotFoundException;
 import com.ara.recipeplanner.model.Difficulty;
-import com.ara.recipeplanner.model.Duration;
 import com.ara.recipeplanner.model.Location;
 import com.ara.recipeplanner.model.Recipe;
 import com.ara.recipeplanner.model.RecipeType;
@@ -24,13 +23,11 @@ public class RecipeService {
   private final RecipeTypeService typeService;
   private final SeasonService seasonService;
   private final DifficultyService difficultyService;
-  private final TimeUnitService timeUnitService;
   private final IngredientQuantityService ingredientQuantityService;
 
   public RecipeService(RecipeRepository repository,
       LocationService locationService, RecipeTypeService typeService,
       SeasonService seasonService, DifficultyService difficultyService,
-      TimeUnitService timeUnitService,
       IngredientQuantityService ingredientQuantityService) {
 
     this.repository = repository;
@@ -38,7 +35,6 @@ public class RecipeService {
     this.typeService = typeService;
     this.seasonService = seasonService;
     this.difficultyService = difficultyService;
-    this.timeUnitService = timeUnitService;
     this.ingredientQuantityService = ingredientQuantityService;
   }
 
@@ -65,7 +61,6 @@ public class RecipeService {
     entity.setType(getValidType(entity));
     entity.setSeason(getValidSeason(entity));
     entity.setDifficulty(getValidDifficulty(entity));
-    entity.setDuration(getValidDuration(entity));
 
     ingredientQuantityService.setValidIngredientQuantities(entity, null);
 
@@ -88,7 +83,6 @@ public class RecipeService {
         e.setType(getValidType(entity));
         e.setSeason(getValidSeason(entity));
         e.setDifficulty(getValidDifficulty(entity));
-        e.setDuration(getValidDuration(entity));
 
         ingredientQuantityService.setValidIngredientQuantities(entity, e);
 
@@ -104,7 +98,6 @@ public class RecipeService {
         entity.setType(getValidType(entity));
         entity.setSeason(getValidSeason(entity));
         entity.setDifficulty(getValidDifficulty(entity));
-        entity.setDuration(getValidDuration(entity));
 
         ingredientQuantityService.setValidIngredientQuantities(entity, null);
 
@@ -157,18 +150,6 @@ public class RecipeService {
 
     return difficultyService.show(
       entity.getDifficulty() != null ? entity.getDifficulty().getId() : null);
-  }
-
-  private Duration getValidDuration(Recipe entity) {
-
-    if (entity.getDuration() != null) {
-
-      entity.getDuration().setTimeUnit(timeUnitService.show(
-        entity.getDuration().getTimeUnit() != null ?
-          entity.getDuration().getTimeUnit().getId() : null));
-    }
-
-    return entity.getDuration();
   }
 
 }

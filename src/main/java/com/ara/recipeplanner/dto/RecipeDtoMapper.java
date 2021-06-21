@@ -22,7 +22,6 @@ public class RecipeDtoMapper {
     dto.setType(RecipeTypeDtoMapper.toDto(model.getType()));
     dto.setSeason(SeasonDtoMapper.toDto(model.getSeason()));
     dto.setDifficulty(DifficultyDtoMapper.toDto(model.getDifficulty()));
-    dto.setDuration(DurationDtoMapper.toDto(model.getDuration()));
     dto.setFrequency(model.getFrequency());
 
     dto.setIngredients(model.getIngredients().stream()
@@ -44,7 +43,6 @@ public class RecipeDtoMapper {
     recipe.setType(RecipeTypeDtoMapper.toModel(dto.getType()));
     recipe.setSeason(SeasonDtoMapper.toModel(dto.getSeason()));
     recipe.setDifficulty(DifficultyDtoMapper.toModel(dto.getDifficulty()));
-    recipe.setDuration(DurationDtoMapper.toModel(dto.getDuration()));
     recipe.setFrequency(dto.getFrequency());
 
     recipe.setIngredients(dto.getIngredients().stream()

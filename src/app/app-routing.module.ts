@@ -10,8 +10,6 @@ import { AvailabilityListComponent } from './availability-list/availability-list
 import { AvailabilityFormComponent } from './availability-form/availability-form.component';
 import { MeasureUnitListComponent } from './measure-unit-list/measure-unit-list.component';
 import { MeasureUnitFormComponent } from './measure-unit-form/measure-unit-form.component';
-import { TimeUnitListComponent } from './time-unit-list/time-unit-list.component';
-import { TimeUnitFormComponent } from './time-unit-form/time-unit-form.component';
 import { IngredientListComponent } from './ingredient-list/ingredient-list.component';
 import { IngredientFormComponent } from './ingredient-form/ingredient-form.component';
 import { LocationListComponent } from './location-list/location-list.component';
@@ -37,9 +35,6 @@ const routes: Routes = [
   { path: 'measureunits/new', component: MeasureUnitFormComponent },
   { path: 'measureunits/:id', component: MeasureUnitFormComponent },
   { path: 'measureunits', component: MeasureUnitListComponent },
-  { path: 'timeunits/new', component: TimeUnitFormComponent },
-  { path: 'timeunits/:id', component: TimeUnitFormComponent },
-  { path: 'timeunits', component: TimeUnitListComponent },
   { path: 'ingredients/new', component: IngredientFormComponent },
   { path: 'ingredients/:id', component: IngredientFormComponent },
   { path: 'ingredients', component: IngredientListComponent },
