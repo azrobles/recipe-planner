@@ -26,6 +26,7 @@ import { SeasonFormComponent } from './season-form/season-form.component';
 import { RecipeTypeListComponent } from './recipe-type-list/recipe-type-list.component';
 import { RecipeTypeFormComponent } from './recipe-type-form/recipe-type-form.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
     SeasonFormComponent,
     RecipeTypeListComponent,
     RecipeTypeFormComponent,
-    RecipeListComponent
+    RecipeListComponent,
+    RecipeFormComponent
   ],
   imports: [
     BrowserModule,

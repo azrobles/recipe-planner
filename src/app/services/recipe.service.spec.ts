@@ -37,8 +37,7 @@ describe('RecipeService', () => {
       type: { id: undefined, name: '' },
       season: { id: undefined, name: '' },
       difficulty: { id: undefined, name: '' },
-      frequency: 0,
-      ingredients: []
+      frequency: 0
     };
 
     it('should return cleared recipe', () => {

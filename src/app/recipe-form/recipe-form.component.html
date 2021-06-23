@@ -1,0 +1,166 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-auto mr-auto">
+      <h3 *ngIf="isAddMode">Add Recipe</h3>
+      <h3 *ngIf="!isAddMode">Edit Recipe</h3>
+    </div>
+
+    <div *ngIf="!isAddMode" class="col-auto">
+      <button type="button" class="btn btn-danger mb-2 mb-sm-0"
+        (click)="deleteRecipe()" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span *ngIf="loading" class="sr-only">Loading...</span>
+        <span *ngIf="!loading">Delete</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" (reset)="onReset($event)">
+
+        <div class="form-group row">
+          <label for="nameInput" class="col-sm-2 col-form-label">Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="nameInput"
+              formControlName="name" required
+              [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched)}"
+              [attr.aria-describedby]="name?.invalid && (name?.dirty || name?.touched) ? 'nameValidationFeedback' : undefined">
+            <div *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+              id="nameValidationFeedback" class="invalid-feedback">
+              <div *ngIf="name?.errors?.required">
+                Name is required.
+              </div>
+              <div *ngIf="name?.errors?.maxlength">
+                Name can be at most 100 characters long.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="locationSelect" class="col-2 col-form-label">Location</label>
+          <div class="col-10">
+            <select class="custom-select" id="locationSelect"
+              [compareWith]="compareIdFn" formControlName="location" required
+              [ngClass]="{'is-invalid': location?.invalid && (location?.dirty || location?.touched)}"
+              [attr.aria-describedby]="location?.invalid && (location?.dirty || location?.touched) ? 'locationValidationFeedback' : undefined">
+              <option *ngFor="let location of locations$ | async"
+                [ngValue]="location">
+                {{ location.name }}
+              </option>
+            </select>
+            <div *ngIf="location?.invalid && (location?.dirty || location?.touched)"
+              id="locationValidationFeedback" class="invalid-feedback">
+              <div *ngIf="location?.errors?.idRequired">
+                Location is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="typeSelect" class="col-2 col-form-label">Type</label>
+          <div class="col-10">
+            <select class="custom-select" id="typeSelect"
+              [compareWith]="compareIdFn" formControlName="type" required
+              [ngClass]="{'is-invalid': type?.invalid && (type?.dirty || type?.touched)}"
+              [attr.aria-describedby]="type?.invalid && (type?.dirty || type?.touched) ? 'typeValidationFeedback' : undefined">
+              <option *ngFor="let type of types$ | async"
+                [ngValue]="type">
+                {{ type.name }}
+              </option>
+            </select>
+            <div *ngIf="type?.invalid && (type?.dirty || type?.touched)"
+              id="typeValidationFeedback" class="invalid-feedback">
+              <div *ngIf="type?.errors?.idRequired">
+                Type is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="seasonSelect" class="col-2 col-form-label">Season</label>
+          <div class="col-10">
+            <select class="custom-select" id="seasonSelect"
+              [compareWith]="compareIdFn" formControlName="season" required
+              [ngClass]="{'is-invalid': season?.invalid && (season?.dirty || season?.touched)}"
+              [attr.aria-describedby]="season?.invalid && (season?.dirty || season?.touched) ? 'seasonValidationFeedback' : undefined">
+              <option *ngFor="let season of seasons$ | async"
+                [ngValue]="season">
+                {{ season.name }}
+              </option>
+            </select>
+            <div *ngIf="season?.invalid && (season?.dirty || season?.touched)"
+              id="seasonValidationFeedback" class="invalid-feedback">
+              <div *ngIf="season?.errors?.idRequired">
+                Season is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="difficultySelect" class="col-2 col-form-label">Difficulty</label>
+          <div class="col-10">
+            <select class="custom-select" id="difficultySelect"
+              [compareWith]="compareIdFn" formControlName="difficulty" required
+              [ngClass]="{'is-invalid': difficulty?.invalid && (difficulty?.dirty || difficulty?.touched)}"
+              [attr.aria-describedby]="difficulty?.invalid && (difficulty?.dirty || difficulty?.touched) ? 'difficultyValidationFeedback' : undefined">
+              <option *ngFor="let difficulty of difficulties$ | async"
+                [ngValue]="difficulty">
+                {{ difficulty.name }}
+              </option>
+            </select>
+            <div *ngIf="difficulty?.invalid && (difficulty?.dirty || difficulty?.touched)"
+              id="difficultyValidationFeedback" class="invalid-feedback">
+              <div *ngIf="difficulty?.errors?.idRequired">
+                Difficulty is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="button" class="btn btn-secondary btn-block"
+              (click)="gotoRecipeList()">
+              Cancel
+            </button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="reset" class="btn btn-secondary btn-block">Reset</button>
+          </div>
+
+          <div class="col-4 col-sm-3 col-md-2 col-xl-1">
+            <button type="submit" class="btn btn-primary btn-block"
+              [disabled]="!recipeForm.valid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="loading" class="sr-only">Loading...</span>
+              <span *ngIf="!loading">Submit</span>
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <p *ngIf="errorMessage">
+        <ngb-alert type="danger" [dismissible]="false">
+          {{ errorMessage }}
+        </ngb-alert>
+      </p>
+    </div>
+  </div>
+
+</div>

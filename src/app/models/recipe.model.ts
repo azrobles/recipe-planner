@@ -12,5 +12,5 @@ export interface Recipe {
   season: Season;
   difficulty: Difficulty;
   frequency: number;
-  ingredients: RecipeIngredientQuantity[];
+  ingredients?: RecipeIngredientQuantity[];
 }

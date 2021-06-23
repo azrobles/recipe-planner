@@ -21,6 +21,7 @@ import { SeasonFormComponent } from './season-form/season-form.component';
 import { RecipeTypeListComponent } from './recipe-type-list/recipe-type-list.component';
 import { RecipeTypeFormComponent } from './recipe-type-form/recipe-type-form.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -50,6 +51,8 @@ const routes: Routes = [
   { path: 'recipetypes/new', component: RecipeTypeFormComponent },
   { path: 'recipetypes/:id', component: RecipeTypeFormComponent },
   { path: 'recipetypes', component: RecipeTypeListComponent },
+  { path: 'recipes/new', component: RecipeFormComponent },
+  { path: 'recipes/:id', component: RecipeFormComponent },
   { path: 'recipes', component: RecipeListComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
