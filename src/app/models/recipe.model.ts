@@ -1,6 +1,6 @@
 import { Difficulty } from "./difficulty.model";
 import { Location } from "./location.model";
-import { RecipeIngredientQuantity } from "./recipe-ingredient-quantity.model";
+import { RecipeIngredient } from "./recipe-ingredient.model";
 import { RecipeType } from "./recipe-type.model";
 import { Season } from "./season.model";
 
@@ -12,5 +12,5 @@ export interface Recipe {
   season: Season;
   difficulty: Difficulty;
   frequency: number;
-  ingredients?: RecipeIngredientQuantity[];
+  ingredients?: RecipeIngredient[];
 }

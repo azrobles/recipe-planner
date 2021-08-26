@@ -2,7 +2,9 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { RecipeIngredient } from '../models/recipe-ingredient.model';
 import { Recipe } from '../models/recipe.model';
+import { IngredientService } from './ingredient.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class RecipeService {
   };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private ingredientService: IngredientService
   ) { }
 
   clearRecipe(): Recipe {
@@ -26,6 +29,14 @@ export class RecipeService {
         season: { id: undefined, name: '' },
         difficulty: { id: undefined, name: '' },
         frequency: 0 };
+  }
+
+  clearRecipeIngredient(): RecipeIngredient {
+    return { id: undefined,
+        ingredient: this.ingredientService.clearIngredient(),
+        amount: 0,
+        measureUnit: { id: undefined, name: '' },
+        optional: false };
   }
 
   getRecipes(): Observable<Recipe[]> {

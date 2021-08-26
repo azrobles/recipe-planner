@@ -1,7 +1,10 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Ingredient } from '../models/ingredient.model';
+import { RecipeIngredient } from '../models/recipe-ingredient.model';
 import { Recipe } from '../models/recipe.model';
+import { IngredientService } from './ingredient.service';
 
 import { RecipeService } from './recipe.service';
 
@@ -11,11 +14,22 @@ describe('RecipeService', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let service: RecipeService;
+  let clearIngredientSpy: jasmine.Spy;
+  let testIngredient: Ingredient = { id: undefined, name: '',
+    availability: { id: undefined, name: '' },
+    supermarket: { id: undefined, name: '' }
+  };
 
   beforeEach(() => {
+    const ingredientService = jasmine.createSpyObj('IngredientService',
+      ['clearIngredient']);
+    clearIngredientSpy = ingredientService.clearIngredient.and
+      .returnValue(testIngredient);
+
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      providers: [ RecipeService ]
+      providers: [ RecipeService,
+        { provide: IngredientService, useValue: ingredientService } ]
     });
 
     httpClient = TestBed.inject(HttpClient);
@@ -42,6 +56,19 @@ describe('RecipeService', () => {
 
     it('should return cleared recipe', () => {
       expect(service.clearRecipe()).toEqual(testData, 'should return cleared recipe');
+    });
+  });
+
+  describe('#clearRecipeIngredient', () => {
+    let testData: RecipeIngredient = { id: undefined,
+      ingredient: testIngredient,
+      amount: 0,
+      measureUnit: { id: undefined, name: '' },
+      optional: false
+    };
+
+    it('should return cleared recipe ingredient', () => {
+      expect(service.clearRecipeIngredient()).toEqual(testData, 'should return cleared recipe ingredient');
     });
   });
 

@@ -1,8 +1,10 @@
 package com.ara.recipeplanner.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 public class RecipeIngredientQuantityDto implements Serializable {
@@ -16,7 +18,12 @@ public class RecipeIngredientQuantityDto implements Serializable {
   private IngredientDto ingredient;
 
   @NotNull
-  private QuantityDto quantity;
+  @Digits(integer = 6, fraction = 4)
+  private BigDecimal amount;
+
+  @NotNull
+  @Valid
+  private MeasureUnitDto measureUnit;
 
   @NotNull
   private Boolean optional;
@@ -37,12 +44,20 @@ public class RecipeIngredientQuantityDto implements Serializable {
     this.ingredient = ingredient;
   }
 
-  public QuantityDto getQuantity() {
-    return quantity;
+  public BigDecimal getAmount() {
+    return amount;
   }
 
-  public void setQuantity(QuantityDto quantity) {
-    this.quantity = quantity;
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
+  public MeasureUnitDto getMeasureUnit() {
+    return measureUnit;
+  }
+
+  public void setMeasureUnit(MeasureUnitDto measureUnit) {
+    this.measureUnit = measureUnit;
   }
 
   public Boolean getOptional() {

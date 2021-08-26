@@ -1,6 +1,7 @@
 package com.ara.recipeplanner.dto;
 
 import com.ara.recipeplanner.model.IngredientQuantity;
+import com.ara.recipeplanner.model.Quantity;
 
 public class RecipeIngredientQuantityDtoMapper {
 
@@ -16,7 +17,8 @@ public class RecipeIngredientQuantityDtoMapper {
     var dto = new RecipeIngredientQuantityDto();
     dto.setId(model.getId());
     dto.setIngredient(IngredientDtoMapper.toDto(model.getIngredient()));
-    dto.setQuantity(QuantityDtoMapper.toDto(model.getQuantity()));
+    dto.setAmount(model.getQuantity().getAmount());
+    dto.setMeasureUnit(MeasureUnitDtoMapper.toDto(model.getQuantity().getMeasureUnit()));
     dto.setOptional(model.getOptional());
 
     return dto;
@@ -29,7 +31,8 @@ public class RecipeIngredientQuantityDtoMapper {
 
     return new IngredientQuantity(dto.getId(), null,
         IngredientDtoMapper.toModel(dto.getIngredient()),
-        QuantityDtoMapper.toModel(dto.getQuantity()), dto.getOptional());
+        new Quantity(dto.getAmount(), MeasureUnitDtoMapper.toModel(dto.getMeasureUnit())),
+        dto.getOptional());
   }
 
 }
