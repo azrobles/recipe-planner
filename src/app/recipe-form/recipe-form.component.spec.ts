@@ -146,6 +146,9 @@ describe('RecipeFormComponent', () => {
     });
 
     it('should reset form when click reset', () => {
+      component.ingredientForm = jasmine.createSpyObj('RecipeIngredientQuantityFormComponent',
+        ['addIngredientQuantities', 'onReset']);
+
       page.nameInput.value = 'New Name';
       page.nameInput.dispatchEvent(new Event('input'));
       fixture.detectChanges();
@@ -154,6 +157,7 @@ describe('RecipeFormComponent', () => {
 
       expect(page.nameInput.value).toBe(testRecipe.name);
       expect(page.nameInput.value).toBeFalsy();
+      expect(component.ingredientForm.onReset).toHaveBeenCalled();
     });
 
     it('should add and navigate when click submit', fakeAsync(() => {
@@ -281,6 +285,9 @@ describe('RecipeFormComponent', () => {
     });
 
     it('should reset form when click reset', () => {
+      component.ingredientForm = jasmine.createSpyObj('RecipeIngredientQuantityFormComponent',
+        ['addIngredientQuantities', 'onReset']);
+
       page.nameInput.value = 'New Name';
       page.nameInput.dispatchEvent(new Event('input'));
       fixture.detectChanges();
@@ -289,6 +296,7 @@ describe('RecipeFormComponent', () => {
 
       expect(page.nameInput.value).toBe(testRecipe.name);
       expect(page.nameInput.value).toBeTruthy();
+      expect(component.ingredientForm.onReset).toHaveBeenCalled();
     });
 
     it('should update and navigate when click submit', fakeAsync(() => {
@@ -364,6 +372,9 @@ function createComponent() {
   fixture = TestBed.createComponent(RecipeFormComponent);
   component = fixture.componentInstance;
   page = new Page(fixture);
+
+  component.ingredientForm = jasmine.createSpyObj('RecipeIngredientQuantityFormComponent',
+    ['addIngredientQuantities', 'onReset']);
 
   fixture.detectChanges();
 }

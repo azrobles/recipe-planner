@@ -27,6 +27,7 @@ import { RecipeTypeListComponent } from './recipe-type-list/recipe-type-list.com
 import { RecipeTypeFormComponent } from './recipe-type-form/recipe-type-form.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
+import { RecipeIngredientQuantityFormComponent } from './recipe-ingredient-quantity-form/recipe-ingredient-quantity-form.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { RecipeFormComponent } from './recipe-form/recipe-form.component';
     RecipeTypeListComponent,
     RecipeTypeFormComponent,
     RecipeListComponent,
-    RecipeFormComponent
+    RecipeFormComponent,
+    RecipeIngredientQuantityFormComponent
   ],
   imports: [
     BrowserModule,

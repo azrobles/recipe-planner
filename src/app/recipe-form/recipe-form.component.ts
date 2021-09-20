@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -8,6 +8,7 @@ import { Location } from '../models/location.model';
 import { RecipeType } from '../models/recipe-type.model';
 import { Recipe } from '../models/recipe.model';
 import { Season } from '../models/season.model';
+import { RecipeIngredientQuantityFormComponent } from '../recipe-ingredient-quantity-form/recipe-ingredient-quantity-form.component';
 import { DifficultyService } from '../services/difficulty.service';
 import { LocationService } from '../services/location.service';
 import { RecipeTypeService } from '../services/recipe-type.service';
@@ -32,6 +33,9 @@ export class RecipeFormComponent implements OnInit {
   recipeForm!: FormGroup;
   isAddMode!: boolean;
   loading = false;
+
+  @ViewChild(RecipeIngredientQuantityFormComponent)
+  ingredientForm!: RecipeIngredientQuantityFormComponent;
 
   constructor(
     private locationService: LocationService,
@@ -115,6 +119,7 @@ export class RecipeFormComponent implements OnInit {
         if(data) {
           this.recipe = data;
           this.recipeForm.patchValue(this.recipe);
+          this.ingredientForm.addIngredientQuantities(this.recipe.ingredients);
         } else {
           this.isAddMode = true;
         }
@@ -145,6 +150,7 @@ export class RecipeFormComponent implements OnInit {
   onReset($event: Event): void {
     $event.preventDefault();
     this.recipeForm.reset(this.recipe);
+    this.ingredientForm.onReset($event, this.recipe.ingredients);
   }
 
   clearRecipe(): void {

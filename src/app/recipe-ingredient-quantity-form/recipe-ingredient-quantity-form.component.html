@@ -1,0 +1,101 @@
+<div [formGroup]="form">
+  <div formArrayName="ingredients">
+
+    <div class="form-row">
+
+      <div class="col-auto">
+        <h4>Ingredients</h4>
+      </div>
+
+      <div class="col-auto">
+        <button type="button" class="btn btn-primary btn-sm" (click)="addIngredient()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+          </svg>
+          Add
+        </button>
+      </div>
+
+    </div>
+
+    <div *ngFor="let control of array.controls; let i=index">
+      <div class="form-row" [formGroupName]="i">
+
+        <div class="col-auto">
+          <label class="sr-only" for="ingredient-{{ i }}">Ingredient</label>
+          <select class="custom-select" id="ingredient-{{ i }}"
+            [compareWith]="compareIdFn" formControlName="ingredient" required
+            [ngClass]="{'is-invalid': getIngredient(i)?.invalid && (getIngredient(i)?.dirty || getIngredient(i)?.touched)}"
+            [attr.aria-describedby]="getIngredient(i)?.invalid && (getIngredient(i)?.dirty || getIngredient(i)?.touched) ? 'ingredient-{{ i }}ValidationFeedback' : undefined">
+            <option *ngFor="let ingredient of ingredients$ | async"
+              [ngValue]="ingredient">
+              {{ ingredient.name }}
+            </option>
+          </select>
+          <div *ngIf="getIngredient(i)?.invalid && (getIngredient(i)?.dirty || getIngredient(i)?.touched)"
+            id="ingredient-{{ i }}ValidationFeedback" class="invalid-feedback">
+            <div *ngIf="getIngredient(i)?.errors?.idRequired">
+              Ingredient is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <div class="input-group mb-3">
+
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="amount-{{ i }}">Amount</label>
+            </div>
+
+            <input type="number" class="form-control" id="amount-{{ i }}" min="0" max="999999.9999" step="0.0001"
+              formControlName="amount" required
+              [ngClass]="{'is-invalid': getAmount(i)?.invalid && (getAmount(i)?.dirty || getAmount(i)?.touched)}"
+              [attr.aria-describedby]="getAmount(i)?.invalid && (getAmount(i)?.dirty || getAmount(i)?.touched) ? 'quantity-{{ i }}ValidationFeedback' : undefined">
+
+            <select class="custom-select" id="measureUnit-{{ i }}"
+              [compareWith]="compareIdFn" formControlName="measureUnit" required
+              [ngClass]="{'is-invalid': getMeasureUnit(i)?.invalid && (getMeasureUnit(i)?.dirty || getMeasureUnit(i)?.touched)}"
+              [attr.aria-describedby]="getMeasureUnit(i)?.invalid && (getMeasureUnit(i)?.dirty || getMeasureUnit(i)?.touched) ? 'quantity-{{ i }}ValidationFeedback' : undefined">
+              <option *ngFor="let measureUnit of measureUnits$ | async"
+                [ngValue]="measureUnit">
+                {{ measureUnit.name }}
+              </option>
+            </select>
+
+            <div class="input-group-append">
+              <label class="input-group-text" for="measureUnit-{{ i }}">Unit</label>
+            </div>
+
+            <div *ngIf="getAmount(i)?.invalid && (getAmount(i)?.dirty || getAmount(i)?.touched) || getMeasureUnit(i)?.invalid && (getMeasureUnit(i)?.dirty || getMeasureUnit(i)?.touched)"
+              id="quantity-{{ i }}ValidationFeedback" class="invalid-feedback">
+              <span *ngIf="getAmount(i)?.invalid && (getAmount(i)?.dirty || getAmount(i)?.touched) && getAmount(i)?.errors?.required">
+                Amount is required.
+              </span>
+              <span *ngIf="getMeasureUnit(i)?.invalid && (getMeasureUnit(i)?.dirty || getMeasureUnit(i)?.touched) && getMeasureUnit(i)?.errors?.idRequired">
+                Unit is required.
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-auto my-1">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="optional-{{ i }}" formControlName="optional">
+            <label class="custom-control-label" for="optional-{{ i }}">Optional</label>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <button type="button" class="btn btn-secondary" (click)="deleteIngredient(i)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
